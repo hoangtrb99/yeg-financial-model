@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YEG – Mô hình Tài chính</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon">YEG</div>
+    <div>
+      <div class="logo-title">Mô hình Tài chính</div>
+      <div class="logo-sub">4 năm TT  ·  7 năm Dự báo</div>
+    </div>
+  </div>
+  <div class="nav-group-label">BÁO CÁO</div>
+  <button class="nav-btn active" onclick="showTab('cover')"     id="nav-cover">📊 Dashboard</button>
+  <button class="nav-btn"        onclick="showTab('assumptions')" id="nav-assumptions">🏢 Tổng quan</button>
+  <button class="nav-btn"        onclick="showTab('is')"        id="nav-is">📋 Kết quả KD</button>
+  <button class="nav-btn"        onclick="showTab('bs')"        id="nav-bs">⚖️ Cân đối KT</button>
+  <button class="nav-btn"        onclick="showTab('cf')"        id="nav-cf">💧 Lưu chuyển TT</button>
+  <div class="nav-group-label">PHÂN TÍCH</div>
+  <button class="nav-btn"        onclick="showTab('ratios')"    id="nav-ratios">📐 Chỉ số TC</button>
+  <button class="nav-btn"        onclick="showTab('dcf')"       id="nav-dcf">💎 Định giá DCF</button>
+  <div class="sidebar-footer">Đơn vị: tỷ VND</div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+  <div id="tab-cover"       class="tab-pane active"></div>
+  <div id="tab-assumptions" class="tab-pane"></div>
+  <div id="tab-is"          class="tab-pane"></div>
+  <div id="tab-bs"          class="tab-pane"></div>
+  <div id="tab-cf"          class="tab-pane"></div>
+  <div id="tab-ratios"      class="tab-pane"></div>
+  <div id="tab-dcf"         class="tab-pane"></div>
+</main>
+
+<script src="data.js"></script>
+<script src="model.js"></script>
+<script src="render.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
