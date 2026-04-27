@@ -1,0 +1,14 @@
+# Excel source files (sensitive data)
+*.xlsx
+~$*.xlsx
+
+# Node
+node_modules/
+package-lock.json
+
+# Claude internal
+.claude/
+
+# OS
+.DS_Store
+Thumbs.db
