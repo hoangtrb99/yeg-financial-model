@@ -696,6 +696,7 @@ const vndSh = v => v == null ? '–' : Math.round(v).toLocaleString('en-US') + '
 
 let charts = {};
 let dashCase = 0;
+let dashYear = NF - 1;
 function destroyChart(id) { if (charts[id]) { charts[id].destroy(); delete charts[id]; } }
 
 const BG_HIST = 'rgba(68,114,196,0.75)';
@@ -809,8 +810,11 @@ function renderCover(r) {
   </div>
 
   <div class="section-label">Định giá &amp; Triển vọng <span class="section-badge fcst">Chọn kịch bản DCF</span></div>
-  <div style="display:flex;gap:8px;margin-bottom:12px">
+  <div style="display:flex;gap:8px;margin-bottom:8px">
     ${['🐻 Bear','📊 Base','🚀 Bull'].map((l,i)=>`<button id="dash-sc-${i}" onclick="switchDashCase(${i})" style="flex:1;padding:10px;border-radius:10px;border:2px solid var(--border);background:white;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;transition:all 0.15s">${l}</button>`).join('')}
+  </div>
+  <div style="display:flex;gap:6px;margin-bottom:12px">
+    ${FCST_YRS.map((y,i)=>`<button id="dash-yr-${i}" onclick="switchDashYear(${i})" style="flex:1;padding:6px 4px;border-radius:8px;border:2px solid var(--border);background:white;cursor:pointer;font-family:inherit;font-size:11px;font-weight:600;color:var(--muted);transition:all 0.15s">${y}</button>`).join('')}
   </div>
   <div id="dash-val"></div>
 
@@ -892,15 +896,15 @@ function renderCover(r) {
 
 function renderDashVal() {
   const r   = compute();
-  const F   = N - 1;
-  const H   = NH - 1;
-  const sc  = YEG.scenarios;
-  const idx = dashCase;
-  const ev  = sc.outputs.ev[idx];
-  const ps  = sc.outputs.sharePrice[idx];
-  const up  = sc.outputs.upside[idx];
+  const H    = NH - 1;
+  const YI   = NH + dashYear;        // data index of selected forecast year
+  const sc   = YEG.scenarios;
+  const idx  = dashCase;
+  const ev   = sc.outputs.ev[idx];
+  const ps   = sc.outputs.sharePrice[idx];
+  const up   = sc.outputs.upside[idx];
   const wacc = sc.outputs.wacc[idx];
-  const mp  = YEG.dcf.marketPrice;
+  const mp   = YEG.dcf.marketPrice;
   const scColors = ['#64748b', '#2E75B6', '#16a34a'];
   const scLabels = ['🐻 Bear', '📊 Base', '🚀 Bull'];
   const scBg     = ['#f8fafc', '#eff6ff', '#f0fdf4'];
@@ -912,6 +916,15 @@ function renderDashVal() {
     btn.style.borderColor = active ? scColors[i] : 'var(--border)';
     btn.style.background  = active ? scBg[i]     : 'white';
     btn.style.color       = active ? scColors[i]  : 'var(--muted)';
+  });
+
+  FCST_YRS.forEach((y, i) => {
+    const btn = document.getElementById('dash-yr-' + i);
+    if (!btn) return;
+    const active = i === dashYear;
+    btn.style.borderColor = active ? 'var(--orange)' : 'var(--border)';
+    btn.style.background  = active ? '#fff7ed'        : 'white';
+    btn.style.color       = active ? 'var(--orange)'  : 'var(--muted)';
   });
 
   const el = document.getElementById('dash-val');
@@ -931,21 +944,26 @@ function renderDashVal() {
     </div>
     <div class="card">
       <div class="card-icon">📈</div>
-      <div class="card-label">Doanh thu ${FCST_YRS[NF-1]}</div>
-      <div class="card-value">${fmt(Math.round(r.rev[F]))} tỷ</div>
-      <div class="card-delta up">↑ ${pct((r.rev[F]-r.rev[H])/r.rev[H])} vs ${HIST_YRS[H]}</div>
+      <div class="card-label">Doanh thu ${FCST_YRS[dashYear]}</div>
+      <div class="card-value">${fmt(Math.round(r.rev[YI]))} tỷ</div>
+      <div class="card-delta up">↑ ${pct((r.rev[YI]-r.rev[H])/r.rev[H])} vs ${HIST_YRS[H]}</div>
     </div>
     <div class="card">
       <div class="card-icon">💰</div>
-      <div class="card-label">EBITDA ${FCST_YRS[NF-1]}</div>
-      <div class="card-value">${fmt(Math.round(r.ebitda[F]))} tỷ</div>
-      <div class="card-delta up">${pct(r.rat_ebitda_m[F])} margin</div>
+      <div class="card-label">EBITDA ${FCST_YRS[dashYear]}</div>
+      <div class="card-value">${fmt(Math.round(r.ebitda[YI]))} tỷ</div>
+      <div class="card-delta up">${pct(r.rat_ebitda_m[YI])} margin</div>
     </div>
   </div>`;
 }
 
 function switchDashCase(idx) {
   dashCase = idx;
+  renderDashVal();
+}
+
+function switchDashYear(idx) {
+  dashYear = idx;
   renderDashVal();
 }
 
