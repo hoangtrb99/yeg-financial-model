@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>🇬🇧 Tiếng Anh Giao Tiếp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'"
+  href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&display=swap">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --blue:#2563eb;--blue-lt:#eff6ff;--blue-dk:#1e40af;
+  --green:#059669;--green-lt:#ecfdf5;
+  --text:#1e293b;--muted:#64748b;--bg:#f1f5f9;--card:#fff;
+  --border:#e2e8f0;--radius:16px;
+  --font:'Be Vietnam Pro',system-ui,-apple-system,sans-serif;
+}
+body{
+  font-family:var(--font);
+  font-size:18px;color:var(--text);background:var(--bg);
+  min-height:100vh;padding-bottom:76px;
+  -webkit-tap-highlight-color:transparent;
+}
+/* HEADER */
+.hdr{
+  background:linear-gradient(135deg,#1d4ed8,#4f46e5);
+  color:#fff;padding:14px 18px 12px;text-align:center;
+  position:sticky;top:0;z-index:200;
+  box-shadow:0 2px 12px rgba(0,0,0,.2);
+}
+.hdr h1{font-size:22px;font-weight:800;letter-spacing:-.3px;}
+.hdr p{font-size:13px;opacity:.85;margin-top:2px;}
+/* BOTTOM NAV */
+.bnav{
+  position:fixed;bottom:0;left:0;right:0;background:#fff;
+  border-top:2px solid var(--border);display:flex;z-index:200;
+  box-shadow:0 -2px 10px rgba(0,0,0,.1);
+}
+.bnav-btn{
+  flex:1;padding:10px 6px;border:none;background:none;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  font-size:12px;font-weight:600;color:var(--muted);min-height:58px;
+  transition:color .2s;
+}
+.bnav-btn.on{color:var(--blue);}
+.bnav-btn span:first-child{font-size:26px;}
+/* PAGES */
+.pg{display:none;padding:16px;}
+.pg.on{display:block;}
+/* CARDS */
+.card{
+  background:var(--card);border-radius:var(--radius);
+  padding:18px;margin-bottom:14px;
+  box-shadow:0 1px 6px rgba(0,0,0,.07);border:1px solid var(--border);
+}
+/* LESSON CARDS */
+.lcard{
+  display:flex;align-items:center;gap:14px;padding:16px 18px;
+  background:#fff;border-radius:var(--radius);margin-bottom:11px;
+  cursor:pointer;border:2px solid var(--border);
+  transition:all .2s;text-align:left;width:100%;font-size:18px;
+}
+.lcard:active{transform:scale(.97);}
+.lcard.done{border-color:var(--green);background:var(--green-lt);}
+.lcard .lem{font-size:38px;flex-shrink:0;}
+.lcard .li{flex:1;}
+.lcard .lw{font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+.lcard .lt{font-size:19px;font-weight:800;color:var(--text);margin:3px 0 2px;}
+.lcard .ld{font-size:14px;color:var(--muted);}
+.lcard .ls{font-size:22px;flex-shrink:0;}
+/* PROGRESS BAR */
+.pbar{background:var(--border);border-radius:100px;height:14px;overflow:hidden;margin:8px 0;}
+.pfill{background:linear-gradient(90deg,var(--green),var(--blue));height:100%;border-radius:100px;transition:width .6s ease;}
+/* BUTTONS */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:13px 22px;border-radius:12px;border:none;cursor:pointer;
+  font-size:17px;font-weight:700;min-height:50px;transition:all .2s;
+  -webkit-tap-highlight-color:transparent;
+}
+.btn:active{transform:scale(.95);}
+.btn-p{background:var(--blue);color:#fff;}
+.btn-g{background:var(--green);color:#fff;}
+.btn-o{background:#fff;color:var(--blue);border:2px solid var(--blue);}
+.btn-lt{background:var(--blue-lt);color:var(--blue);}
+.btn-w{width:100%;}
+.btn-sm{padding:10px 16px;font-size:15px;min-height:44px;}
+/* AUDIO BUTTON */
+.abtn{
+  background:#f0f9ff;color:#0284c7;border:2px solid #bae6fd;
+  border-radius:50px;padding:9px 18px;font-size:15px;cursor:pointer;
+  display:inline-flex;align-items:center;gap:7px;font-weight:700;
+  transition:all .2s;min-height:42px;
+}
+.abtn:active{background:#bae6fd;}
+button,input,select{font-family:inherit;}
+/* FLASHCARD */
+.fcard{
+  background:linear-gradient(135deg,#4f46e5,#7c3aed);
+  border-radius:22px;padding:36px 22px;text-align:center;
+  color:#fff;margin-bottom:14px;min-height:200px;
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:10px;
+  box-shadow:0 8px 30px rgba(79,70,229,.35);
+  cursor:pointer;user-select:none;-webkit-user-select:none;
+}
+.fhint{font-size:15px;opacity:.75;margin-top:4px;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:.75}50%{opacity:.45}}
+.fcard .fen{font-size:42px;font-weight:900;letter-spacing:-.5px;line-height:1.1;}
+.fcard .fph{
+  font-size:19px;font-style:italic;opacity:.9;
+  background:rgba(255,255,255,.2);padding:5px 16px;border-radius:100px;
+}
+.fcard .fvi{font-size:22px;font-weight:700;opacity:.95;}
+/* CARD NAV */
+.cnav{display:flex;gap:10px;align-items:center;justify-content:center;margin-bottom:18px;}
+.cnum{font-size:17px;color:var(--muted);min-width:70px;text-align:center;font-weight:700;}
+/* TABS */
+.tabs{
+  display:flex;background:var(--border);border-radius:12px;
+  padding:4px;margin-bottom:18px;gap:3px;
+}
+.tbtn{
+  flex:1;padding:11px 6px;border:none;border-radius:9px;background:transparent;
+  cursor:pointer;font-size:14px;font-weight:700;color:var(--muted);transition:all .2s;
+}
+.tbtn.on{background:#fff;color:var(--blue);box-shadow:0 1px 4px rgba(0,0,0,.1);}
+/* PHRASE ITEM */
+.ph-item{
+  background:#fff;border:2px solid var(--border);
+  border-radius:14px;padding:15px;margin-bottom:11px;
+}
+.ph-en{font-size:19px;font-weight:800;color:var(--blue);margin-bottom:4px;}
+.ph-ph{font-size:14px;color:#0284c7;font-style:italic;margin-bottom:5px;}
+.ph-vi{font-size:17px;color:var(--text);margin-bottom:6px;}
+.ph-ctx{font-size:13px;color:var(--muted);border-top:1px solid var(--border);padding-top:6px;margin-top:4px;}
+/* QA DIALOGUE */
+.qa-item{background:#fff;border:2px solid var(--border);border-radius:14px;padding:16px;margin-bottom:14px;}
+.qa-q{background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:12px;margin-bottom:10px;}
+.qa-lbl{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;}
+.qa-en{font-size:18px;font-weight:800;color:var(--blue-dk);margin-bottom:3px;}
+.qa-vi{font-size:15px;color:var(--muted);font-style:italic;}
+.qa-ans{display:flex;flex-direction:column;gap:8px;}
+.qa-opt{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:12px;}
+.qa-opt .qa-en{color:var(--green);font-size:17px;}
+.qa-ctx{font-size:13px;color:#92400e;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:10px;margin-top:10px;}
+/* QUIZ */
+.qbox{
+  font-size:22px;font-weight:800;text-align:center;padding:22px 18px;
+  background:linear-gradient(135deg,#f0f9ff,#e0f2fe);border-radius:16px;
+  margin-bottom:18px;color:var(--blue-dk);min-height:90px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+}
+.qbox .qsub{font-size:15px;font-weight:500;color:var(--muted);}
+.qopts{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:16px;}
+.qopt{
+  padding:16px 10px;border:3px solid var(--border);border-radius:14px;
+  background:#fff;cursor:pointer;font-size:16px;font-weight:700;
+  text-align:center;transition:all .2s;min-height:68px;
+  display:flex;align-items:center;justify-content:center;
+}
+.qopt:active{transform:scale(.95);}
+.qopt.ok{border-color:var(--green);background:var(--green-lt);color:var(--green);}
+.qopt.no{border-color:#dc2626;background:#fef2f2;color:#dc2626;}
+/* STATS GRID */
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:14px;}
+.scard{background:#fff;border-radius:14px;padding:16px;text-align:center;border:1px solid var(--border);}
+.snum{font-size:38px;font-weight:900;color:var(--blue);}
+.slbl{font-size:13px;color:var(--muted);margin-top:4px;font-weight:600;}
+/* LOGIN OVERLAY */
+.login-ov{
+  position:fixed;inset:0;background:#f1f5f9;z-index:500;
+  display:flex;flex-direction:column;align-items:center;
+  overflow-y:auto;padding:36px 20px 60px;
+}
+.pcard{
+  display:flex;align-items:center;gap:14px;padding:18px 20px;
+  background:#fff;border:2px solid var(--border);border-radius:16px;
+  margin-bottom:12px;cursor:pointer;width:100%;text-align:left;
+  transition:all .2s;box-shadow:0 1px 6px rgba(0,0,0,.06);
+}
+.pcard:active{transform:scale(.97);border-color:var(--blue);}
+.pavatar{
+  width:54px;height:54px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:28px;
+}
+.pname{font-size:20px;font-weight:800;color:var(--text);}
+.psub{font-size:13px;color:var(--muted);margin-top:2px;}
+.name-input{
+  flex:1;padding:14px 16px;border:2px solid var(--border);border-radius:12px;
+  font-size:17px;font-family:inherit;outline:none;-webkit-appearance:none;appearance:none;
+  background:#fff;color:var(--text);
+}
+.name-input:focus{border-color:var(--blue);}
+/* UTILS */
+.sec-ttl{font-size:19px;font-weight:800;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.back-btn{
+  display:flex;align-items:center;gap:6px;background:none;border:none;
+  cursor:pointer;font-size:17px;color:var(--blue);font-weight:700;padding:8px 0;margin-bottom:14px;
+}
+.banner{
+  border-radius:20px;padding:22px 18px;margin-bottom:18px;text-align:center;color:#fff;
+}
+.banner h2{font-size:24px;font-weight:900;margin-bottom:6px;}
+.banner p{font-size:15px;opacity:.9;}
+.tip{
+  background:#fffbeb;border:2px solid #fde68a;border-radius:14px;
+  padding:14px;margin-bottom:14px;font-size:15px;color:#92400e;
+}
+.tip strong{display:block;margin-bottom:4px;color:#78350f;font-size:16px;}
+.wbadge{
+  display:inline-block;color:#fff;border-radius:100px;
+  padding:3px 14px;font-size:12px;font-weight:800;margin-bottom:8px;
+}
+.hidden{display:none!important;}
+@media(min-width:600px){
+  body{max-width:480px;margin:0 auto;}
+  .bnav{max-width:480px;left:50%;transform:translateX(-50%);}
+  .hdr{border-radius:0;}
+}
+</style>
+</head>
+<body>
+
+<div class="hdr" style="position:relative;">
+  <h1>🇬🇧 Tiếng Anh Giao Tiếp</h1>
+  <p>Dành cho người mới bắt đầu • Lộ trình 8 tuần</p>
+  <button id="profile-btn" onclick="showLogin()"
+    style="position:absolute;top:12px;right:14px;background:rgba(255,255,255,.18);
+    border:1.5px solid rgba(255,255,255,.4);border-radius:100px;color:#fff;
+    padding:6px 13px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">
+    👤 Đăng nhập
+  </button>
+</div>
+
+<!-- PAGE: HOME -->
+<div id="pg-home" class="pg on">
+  <div class="banner" style="background:linear-gradient(135deg,#1d4ed8,#7c3aed)">
+    <h2>Chào mừng bạn! 👋</h2>
+    <p>8 tuần học tiếng Anh giao tiếp hàng ngày<br>Mỗi ngày chỉ cần 15–20 phút!</p>
+  </div>
+  <div class="card">
+    <div class="sec-ttl">📊 Tiến độ học</div>
+    <div class="pbar"><div class="pfill" id="home-pbar" style="width:0%"></div></div>
+    <div style="display:flex;justify-content:space-between;margin-top:6px;">
+      <span id="home-ptxt" style="color:var(--muted);font-size:15px;">0/8 bài học</span>
+      <span id="home-ppct" style="color:var(--blue);font-weight:800;font-size:15px;">0%</span>
+    </div>
+  </div>
+  <div class="sgrid">
+    <div class="scard"><div class="snum" id="h-words">0</div><div class="slbl">Từ đã học</div></div>
+    <div class="scard"><div class="snum" id="h-phrases">0</div><div class="slbl">Câu đã học</div></div>
+  </div>
+  <div class="tip">
+    <strong>💡 Bí quyết học hiệu quả</strong>
+    Nghe phát âm và đọc to theo nhiều lần. Đừng lo nếu chưa đúng, cứ luyện đều đặn mỗi ngày là được!
+  </div>
+  <div class="sec-ttl">📚 Các Bài Học</div>
+  <div id="lesson-list"></div>
+</div>
+
+<!-- PAGE: LESSON -->
+<div id="pg-lesson" class="pg">
+  <button class="back-btn" onclick="goHome()">← Về trang chủ</button>
+  <div id="les-hdr"></div>
+  <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:13px;color:#0369a1;line-height:1.6;">
+    📚 <strong>Học theo thứ tự tốt nhất:</strong> 1. Từ vựng → 2. Câu mẫu → 3. Hội thoại → 4. Quiz ✅
+  </div>
+  <div class="tabs">
+    <button class="tbtn on" onclick="showTab('vocab')" id="t-vocab">📖 Từ vựng</button>
+    <button class="tbtn" onclick="showTab('phrases')" id="t-phrases">💬 Câu mẫu</button>
+    <button class="tbtn" onclick="showTab('qa')" id="t-qa">🗣️ Hội thoại</button>
+    <button class="tbtn" onclick="showTab('quiz')" id="t-quiz">🎯 Quiz</button>
+  </div>
+  <!-- VOCAB TAB -->
+  <div id="tc-vocab">
+    <div class="fcard" onclick="revealCard()">
+      <div class="fen" id="fc-en">Hello</div>
+      <div class="fph" id="fc-ph">hê-lô</div>
+      <div id="fc-vi-wrap" style="display:none;">
+        <div class="fvi" id="fc-vi">Xin chào</div>
+      </div>
+      <div class="fhint" id="fc-hint">👆 Nhấn để xem nghĩa</div>
+    </div>
+    <div style="text-align:center;margin-bottom:14px;">
+      <button class="abtn" onclick="event.stopPropagation();speakCur()">🔊 Nghe phát âm</button>
+    </div>
+    <div class="cnav">
+      <button class="btn btn-o btn-sm" onclick="prevCard()">◀ Trước</button>
+      <span class="cnum" id="cnum">1 / 10</span>
+      <button class="btn btn-p btn-sm" onclick="nextCard()">Tiếp ▶</button>
+    </div>
+    <div id="vocab-list"></div>
+    <button class="btn btn-g btn-w" style="margin-top:8px;" onclick="markDone(this)">✅ Đánh dấu hoàn thành bài này</button>
+  </div>
+  <!-- PHRASES TAB -->
+  <div id="tc-phrases" class="hidden">
+    <div class="tip">
+      <strong>💡 Cách luyện tập</strong>
+      Bấm 🔊 để nghe, rồi đọc to theo. Lặp lại 3 lần mỗi câu!
+    </div>
+    <div id="ph-list"></div>
+    <button class="btn btn-g btn-w" style="margin-top:8px;" onclick="markDone(this)">✅ Đánh dấu hoàn thành bài này</button>
+  </div>
+  <!-- QA TAB -->
+  <div id="tc-qa" class="hidden">
+    <div class="tip">
+      <strong>💡 Luyện hội thoại</strong>
+      Người khác nói câu hỏi, bạn chọn câu trả lời phù hợp. Bấm 🔊 để nghe cách phát âm!
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+      <span style="font-size:14px;color:var(--muted);font-weight:600;">💭 Thử tự nghĩ câu trả lời trước!</span>
+      <button class="abtn" id="qa-toggle-btn" onclick="toggleQAMode()" style="font-size:13px;padding:7px 14px;">🙈 Ẩn đáp án</button>
+    </div>
+    <div id="qa-list"></div>
+  </div>
+  <!-- QUIZ TAB -->
+  <div id="tc-quiz" class="hidden">
+    <div id="quiz-area"></div>
+  </div>
+</div>
+
+<!-- PAGE: PROGRESS -->
+<div id="pg-progress" class="pg">
+  <div class="banner" style="background:linear-gradient(135deg,#059669,#0d9488)">
+    <h2>⭐ Kết Quả Học Tập</h2>
+    <p>Cố lên! Từng bước một là bạn làm được!</p>
+  </div>
+  <div class="sgrid">
+    <div class="scard"><div class="snum" id="p-done">0</div><div class="slbl">Bài hoàn thành</div></div>
+    <div class="scard"><div class="snum" id="p-words">0</div><div class="slbl">Từ đã học</div></div>
+    <div class="scard"><div class="snum" id="p-phr">0</div><div class="slbl">Câu giao tiếp</div></div>
+    <div class="scard"><div class="snum" id="p-quiz">0</div><div class="slbl">Quiz đã làm</div></div>
+  </div>
+  <div class="sec-ttl">📅 Chi tiết từng tuần</div>
+  <div id="p-detail"></div>
+  <div class="card" style="background:#f0f9ff;border-color:#bae6fd;text-align:center;margin-bottom:14px;">
+    <div style="font-size:44px;margin-bottom:10px;">🎯</div>
+    <div style="font-size:18px;font-weight:800;color:#0369a1;margin-bottom:8px;">Mục tiêu sau 8 tuần</div>
+    <div style="font-size:16px;color:#0284c7;line-height:1.8;">
+      ✅ Chào hỏi, giới thiệu bản thân<br>
+      ✅ Mua đồ ở siêu thị tự tin<br>
+      ✅ Gọi đồ ở quán café, nhà hàng<br>
+      ✅ Đi xe buýt, tàu điện, gọi taxi<br>
+      ✅ Mua sắm quần áo<br>
+      ✅ Hỏi đường và hiểu chỉ đường<br>
+      ✅ Xử lý tình huống khẩn cấp
+    </div>
+  </div>
+  <button class="btn btn-sm btn-w" onclick="resetAll()" style="background:#fef2f2;color:#dc2626;border:1px solid #fca5a5;">
+    🔄 Đặt lại tiến độ từ đầu
+  </button>
+</div>
+
+<!-- LOGIN OVERLAY -->
+<div id="login-ov" class="login-ov hidden">
+  <div style="text-align:center;margin-bottom:32px;width:100%;max-width:400px;">
+    <div style="font-size:60px;margin-bottom:12px;">🇬🇧</div>
+    <h1 style="font-size:26px;font-weight:900;color:var(--blue);margin-bottom:8px;">Tiếng Anh Giao Tiếp</h1>
+    <p style="color:var(--muted);font-size:16px;">Chọn tên của bạn để bắt đầu học</p>
+  </div>
+
+  <div style="width:100%;max-width:400px;">
+    <div id="plist"></div>
+
+    <div style="background:#fff;border-radius:16px;padding:20px;border:2px solid var(--border);">
+      <div style="font-size:16px;font-weight:800;color:var(--text);margin-bottom:12px;">➕ Người học mới</div>
+      <div style="display:flex;gap:10px;margin-bottom:8px;">
+        <input id="name-inp" class="name-input" type="text"
+          placeholder="Nhập tên của bạn..." maxlength="20"
+          autocomplete="off" autocorrect="off" autocapitalize="words">
+        <button class="btn btn-p" onclick="createUser()" style="padding:14px 20px;flex-shrink:0;">✓</button>
+      </div>
+      <div id="name-err" style="color:#dc2626;font-size:14px;min-height:18px;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bnav">
+  <button class="bnav-btn on" onclick="nav('home')" id="n-home">
+    <span>🏠</span><span>Trang chủ</span>
+  </button>
+  <button class="bnav-btn" onclick="nav('progress')" id="n-progress">
+    <span>⭐</span><span>Tiến độ</span>
+  </button>
+</nav>
+
+<script>
+// ============================================================
+// PROFILE / USER SYSTEM
+// ============================================================
+const AVATARS = ['🧑','👩','👨','👵','👴','👧','👦','🧓'];
+const COLORS  = ['#3b82f6','#8b5cf6','#ec4899','#10b981','#f59e0b','#ef4444','#06b6d4','#84cc16'];
+
+function _ls(k,v){
+  try{ if(v===undefined) return localStorage.getItem(k);
+       localStorage.setItem(k,v); return true; }
+  catch(e){ return null; }
+}
+
+function getUsers(){ try{ return JSON.parse(_ls('eng2m_users')||'[]'); }catch(e){ return []; } }
+function saveUsers(u){ _ls('eng2m_users', JSON.stringify(u)); }
+function curUser(){ return _ls('eng2m_cur')||''; }
+function setCurUser(n){ _ls('eng2m_cur', n); }
+function progKey(){ const u=curUser(); return u?'eng2m_p_'+u.replace(/\W/g,'_'):'eng2m_p_guest'; }
+
+function showLogin(){
+  renderPlist();
+  document.getElementById('login-ov').classList.remove('hidden');
+  document.getElementById('name-inp').value='';
+  document.getElementById('name-err').textContent='';
+}
+function hideLogin(){ document.getElementById('login-ov').classList.add('hidden'); }
+
+function renderPlist(){
+  const users = getUsers();
+  const el = document.getElementById('plist');
+  if(!users.length){
+    el.innerHTML = '<p style="text-align:center;color:var(--muted);font-size:15px;padding:16px 0 24px;">Chưa có ai. Tạo tên học của bạn bên dưới!</p>';
+    return;
+  }
+  el.innerHTML = '<div style="font-size:14px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Chọn tên của bạn:</div>'
+    + users.map((u,i)=>
+      '<button class="pcard" data-n="'+encodeURIComponent(u.name)+'">'
+      +'<div class="pavatar" style="background:'+u.color+'22;border:2px solid '+u.color+'44;">'+u.avatar+'</div>'
+      +'<div style="flex:1;">'
+      +'<div class="pname">'+u.name+'</div>'
+      +'<div class="psub">Học lần cuối: '+(u.lastSeen||'Chưa có')+'</div>'
+      +'</div>'
+      +'<span style="font-size:20px;color:var(--muted);">▶</span>'
+      +'</button>'
+    ).join('');
+  el.querySelectorAll('.pcard').forEach(b=>{
+    b.onclick = ()=>selectUser(decodeURIComponent(b.dataset.n));
+  });
+}
+
+function selectUser(name){
+  const users = getUsers();
+  const u = users.find(u=>u.name===name);
+  if(u){ u.lastSeen = new Date().toLocaleDateString('vi-VN'); saveUsers(users); }
+  setCurUser(name);
+  hideLogin();
+  refreshAll();
+}
+
+function createUser(){
+  const name = document.getElementById('name-inp').value.trim();
+  const err  = document.getElementById('name-err');
+  if(!name){ err.textContent='Vui lòng nhập tên của bạn'; return; }
+  if(name.length<2){ err.textContent='Tên cần ít nhất 2 chữ cái'; return; }
+  err.textContent='';
+  const users = getUsers();
+  if(users.find(u=>u.name===name)){ selectUser(name); return; }
+  const idx = users.length % AVATARS.length;
+  users.push({name, avatar:AVATARS[idx], color:COLORS[idx], lastSeen:new Date().toLocaleDateString('vi-VN')});
+  saveUsers(users);
+  setCurUser(name);
+  hideLogin();
+  refreshAll();
+}
+
+function updateProfileBtn(){
+  const btn = document.getElementById('profile-btn');
+  const name = curUser();
+  if(btn) btn.textContent = name ? '👤 '+name : '👤 Đăng nhập';
+}
+
+function refreshAll(){
+  updateProfileBtn();
+  updateHomeUI();
+  renderLessonList();
+}
+
+// ============================================================
+// DATA
+// ============================================================
+// Ghi chú phiên âm: "th" = để lưỡi giữa 2 răng | "ch" = như "chào" | "j" = âm j mềm | "sh" = âm sh
+const LESSONS = [
+{
+  id:0,week:1,title:"Chào Hỏi Căn Bản",sub:"Greetings & Introduction",
+  emoji:"👋",desc:"Xin chào, cảm ơn, xin lỗi...",color:"#3b82f6",
+  vocab:[
+    {en:"Hello",vi:"Xin chào",ph:"hê-lô"},
+    {en:"Hi",vi:"Chào (thân mật)",ph:"hai"},
+    {en:"Good morning",vi:"Chào buổi sáng",ph:"gút mo-ninh"},
+    {en:"Good afternoon",vi:"Chào buổi chiều",ph:"gút áp-tơ-nun"},
+    {en:"Good evening",vi:"Chào buổi tối",ph:"gút i-vơ-ninh"},
+    {en:"Good night",vi:"Chúc ngủ ngon",ph:"gút nai-t"},
+    {en:"Goodbye",vi:"Tạm biệt",ph:"gút-bai"},
+    {en:"See you later",vi:"Gặp lại sau",ph:"xi yu lây-tơ"},
+    {en:"Thank you",vi:"Cảm ơn",ph:"thênh-kiu"},
+    {en:"Thank you very much",vi:"Cảm ơn rất nhiều",ph:"thênh-kiu ve-ri mắch"},
+    {en:"You're welcome",vi:"Không có gì",ph:"yo-ơ ueo-côm"},
+    {en:"Please",vi:"Làm ơn",ph:"pli-z"},
+    {en:"Sorry",vi:"Xin lỗi",ph:"xo-ri"},
+    {en:"Excuse me",vi:"Xin lỗi / Cho hỏi",ph:"ek-xkiu mi"},
+    {en:"Yes",vi:"Có / Vâng",ph:"yet"},
+    {en:"No",vi:"Không",ph:"nô"},
+    {en:"OK",vi:"Được rồi",ph:"ô-kê"},
+    {en:"I don't understand",vi:"Tôi không hiểu",ph:"ai đôn-t ăn-đờ-xtend"},
+    {en:"Can you repeat?",vi:"Nói lại được không?",ph:"kền yu ri-pit?"},
+    {en:"How are you?",vi:"Bạn có khỏe không?",ph:"hao a yu?"},
+    {en:"I'm fine",vi:"Tôi khỏe",ph:"ai'm fain"},
+    {en:"My name is...",vi:"Tên tôi là...",ph:"mai nêm ít..."},
+  ],
+  phrases:[
+    {en:"Hello! How are you?",vi:"Xin chào! Bạn có khỏe không?",ph:"hê-lô! hao a yu?",ctx:"Gặp ai đó và hỏi thăm sức khỏe"},
+    {en:"I'm fine, thank you.",vi:"Tôi khỏe, cảm ơn.",ph:"ai'm fain, thênh-kiu.",ctx:"Trả lời khi được hỏi thăm"},
+    {en:"What is your name?",vi:"Tên bạn là gì?",ph:"uót ít yo-ơ nêm?",ctx:"Hỏi tên người khác"},
+    {en:"My name is Lan.",vi:"Tên tôi là Lan.",ph:"mai nêm ít Lan.",ctx:"Tự giới thiệu tên mình"},
+    {en:"Nice to meet you.",vi:"Rất vui được gặp bạn.",ph:"nai-s tu mit yu.",ctx:"Khi gặp ai lần đầu tiên"},
+    {en:"Have a good day!",vi:"Chúc bạn ngày vui!",ph:"háv ơ gút đây!",ctx:"Lời chúc khi chia tay"},
+    {en:"Please speak slowly.",vi:"Làm ơn nói chậm thôi.",ph:"pli-z xpik xlô-li.",ctx:"Khi người khác nói quá nhanh"},
+    {en:"Could you write it down?",vi:"Bạn có thể viết ra không?",ph:"kút yu rai-t ít đaon?",ctx:"Nhờ viết thay vì nói"},
+  ],
+  qa:[
+    {
+      q:"How are you?",q_vi:"Bạn có khỏe không?",
+      a:["I'm fine, thank you! And you?","Not bad, thank you.","Very well, thanks!"],
+      a_vi:["Tôi khỏe, cảm ơn! Còn bạn?","Cũng tạm thôi, cảm ơn.","Rất khỏe, cảm ơn!"],
+      ctx:"Câu hỏi thăm sức khỏe thông dụng nhất"
+    },
+    {
+      q:"What is your name?",q_vi:"Tên bạn là gì?",
+      a:["My name is Lan.","I'm Lan. Nice to meet you!","Call me Lan, please."],
+      a_vi:["Tên tôi là Lan.","Tôi là Lan. Rất vui được gặp bạn!","Gọi tôi là Lan nhé."],
+      ctx:"Tự giới thiệu khi gặp người mới"
+    },
+    {
+      q:"Where are you from?",q_vi:"Bạn đến từ đâu?",
+      a:["I'm from Vietnam.","I'm Vietnamese.","I come from Hanoi, Vietnam."],
+      a_vi:["Tôi đến từ Việt Nam.","Tôi là người Việt Nam.","Tôi đến từ Hà Nội, Việt Nam."],
+      ctx:"Khi ai hỏi về quê hương"
+    },
+  ]
+},
+{
+  id:1,week:2,title:"Số Đếm & Tiền",sub:"Numbers & Money",
+  emoji:"💰",desc:"Đếm số, hỏi giá, trả tiền ở London...",color:"#8b5cf6",
+  vocab:[
+    {en:"One",vi:"Một",ph:"oăn"},
+    {en:"Two",vi:"Hai",ph:"tu"},
+    {en:"Three",vi:"Ba",ph:"thri"},
+    {en:"Four",vi:"Bốn",ph:"pho"},
+    {en:"Five",vi:"Năm",ph:"phai-v"},
+    {en:"Ten",vi:"Mười",ph:"tần"},
+    {en:"Twenty",vi:"Hai mươi",ph:"tuên-ti"},
+    {en:"Fifty",vi:"Năm mươi",ph:"phíp-ti"},
+    {en:"One hundred",vi:"Một trăm",ph:"oăn hăn-drờt"},
+    {en:"Pound (£)",vi:"Đồng Bảng Anh",ph:"pao-nd"},
+    {en:"Pence (p)",vi:"Xu (100p = £1)",ph:"pent-s"},
+    {en:"Quid",vi:"Bảng Anh (nói thân mật)",ph:"quít"},
+    {en:"Price",vi:"Giá cả",ph:"prái-s"},
+    {en:"Change",vi:"Tiền thối lại",ph:"chênj"},
+    {en:"Cheap",vi:"Rẻ (tiền)",ph:"chip"},
+    {en:"Expensive",vi:"Đắt (tiền)",ph:"ék-xpen-xiv"},
+    {en:"Contactless",vi:"Thanh toán không chạm",ph:"cón-tác-lết"},
+    {en:"Receipt",vi:"Hóa đơn",ph:"ri-xit"},
+    {en:"Voucher",vi:"Phiếu giảm giá",ph:"vao-chơ"},
+    {en:"Refund",vi:"Hoàn tiền",ph:"ri-phănd"},
+    {en:"Cash",vi:"Tiền mặt",ph:"cash"},
+    {en:"Card",vi:"Thẻ ngân hàng",ph:"ca-d"},
+  ],
+  phrases:[
+    {en:"How much is this?",vi:"Cái này giá bao nhiêu?",ph:"hao mắch ít đít?",ctx:"Hỏi giá bất kỳ món đồ nào"},
+    {en:"It's five pounds fifty.",vi:"Năm bảng rưỡi.",ph:"ít's phai-v pao-ndz phíp-ti.",ctx:"Giá hay gặp ở London"},
+    {en:"Do you take contactless?",vi:"Có chấp nhận thẻ không chạm không?",ph:"du yu têi-k cón-tác-lết?",ctx:"Hỏi trước khi rút thẻ ra"},
+    {en:"Can I pay by card?",vi:"Tôi có thể trả bằng thẻ không?",ph:"kền ai pê bai ca-d?",ctx:"Thanh toán bằng thẻ"},
+    {en:"Can I have the receipt?",vi:"Cho tôi hóa đơn được không?",ph:"kền ai háv đơ ri-xit?",ctx:"Xin hóa đơn sau khi mua"},
+    {en:"Keep the change.",vi:"Khỏi thối, giữ lấy.",ph:"kip đơ chênj.",ctx:"Khi không cần tiền thối"},
+    {en:"That's too expensive.",vi:"Đắt quá.",ph:"đét's tu ék-xpen-xiv.",ctx:"Khi thấy giá quá đắt"},
+    {en:"Do you have anything cheaper?",vi:"Có cái nào rẻ hơn không?",ph:"du yu háv ê-ni-thinh chi-pơ?",ctx:"Hỏi tìm hàng rẻ hơn"},
+  ],
+  qa:[
+    {
+      q:"How would you like to pay?",q_vi:"Bạn muốn thanh toán thế nào?",
+      a:["By card, please.","Contactless, please.","Cash, please."],
+      a_vi:["Bằng thẻ, làm ơn.","Không chạm, làm ơn.","Tiền mặt, làm ơn."],
+      ctx:"Câu hỏi thường gặp khi thanh toán ở London"
+    },
+    {
+      q:"Would you like a receipt?",q_vi:"Bạn có muốn hóa đơn không?",
+      a:["Yes please.","No thank you.","Yes, could I have one?"],
+      a_vi:["Vâng, làm ơn.","Không, cảm ơn.","Có, cho tôi một cái nhé?"],
+      ctx:"Nhân viên hay hỏi câu này sau khi thanh toán"
+    },
+    {
+      q:"Is that cash or card?",q_vi:"Tiền mặt hay thẻ?",
+      a:["Card, please.","Cash — here's ten pounds.","Contactless, is that OK?"],
+      a_vi:["Thẻ, làm ơn.","Tiền mặt — đây mười bảng.","Không chạm, được không?"],
+      ctx:"Câu hỏi phổ biến ở quầy tính tiền"
+    },
+  ]
+},
+{
+  id:2,week:3,title:"Ở Siêu Thị",sub:"At the Supermarket",
+  emoji:"🛒",desc:"Mua sắm tại Tesco, Sainsbury's, Waitrose...",color:"#f59e0b",
+  vocab:[
+    {en:"Supermarket",vi:"Siêu thị",ph:"xu-pơ-ma-kít"},
+    {en:"Trolley",vi:"Xe đẩy siêu thị (UK)",ph:"tró-li"},
+    {en:"Basket",vi:"Giỏ xách tay",ph:"ba-xkít"},
+    {en:"Aisle",vi:"Lối đi trong siêu thị",ph:"ai-ồl"},
+    {en:"Till",vi:"Quầy tính tiền (UK)",ph:"til"},
+    {en:"Self-checkout",vi:"Máy tự thanh toán",ph:"xeo-ph chek-ao-t"},
+    {en:"Queue",vi:"Xếp hàng chờ",ph:"kiu"},
+    {en:"Meal deal",vi:"Combo bữa trưa (sandwich+drink+snack)",ph:"mil đil"},
+    {en:"Loyalty card",vi:"Thẻ tích điểm (Clubcard, Nectar...)",ph:"loi-ơl-ti ca-d"},
+    {en:"Reduced",vi:"Hàng giảm giá sắp hết hạn",ph:"ri-điu-st"},
+    {en:"Best before",vi:"Hạn sử dụng tốt nhất",ph:"bet bi-pho"},
+    {en:"Use by",vi:"Hạn sử dụng cuối cùng",ph:"iu-z bai"},
+    {en:"Organic",vi:"Hữu cơ",ph:"o-gé-nik"},
+    {en:"Free range",vi:"Gà/trứng thả vườn",ph:"phri rênj"},
+    {en:"Bread",vi:"Bánh mì",ph:"brét"},
+    {en:"Milk",vi:"Sữa",ph:"milk"},
+    {en:"Egg",vi:"Trứng",ph:"ek"},
+    {en:"Chicken",vi:"Gà",ph:"chic-kin"},
+    {en:"Vegetable",vi:"Rau củ",ph:"vej-tơ-bồ"},
+    {en:"Fruit",vi:"Trái cây",ph:"phru-t"},
+    {en:"Bag for life",vi:"Túi dùng lại (mua 1 lần, dùng mãi)",ph:"beg pho lai-ph"},
+    {en:"Cashier",vi:"Nhân viên thu ngân",ph:"ka-shia"},
+  ],
+  phrases:[
+    {en:"Excuse me, where is the bread?",vi:"Xin lỗi, bánh mì ở đâu?",ph:"ek-xkiu mi, whe-r ít đơ brét?",ctx:"Hỏi nhân viên tìm sản phẩm"},
+    {en:"I'm looking for free range eggs.",vi:"Tôi đang tìm trứng gà thả vườn.",ph:"ai'm lúk-kinh pho phri rênj ek-z.",ctx:"Hỏi tìm sản phẩm cụ thể"},
+    {en:"Can I get a bag for life?",vi:"Cho tôi mua túi dùng lại.",ph:"kền ai gét ơ beg pho lai-ph?",ctx:"Mua túi tái sử dụng ở siêu thị UK"},
+    {en:"Do you have a Clubcard?",vi:"Bạn có thẻ Clubcard không?",ph:"du yu háv ơ clắb-ca-d?",ctx:"Tesco hay hỏi câu này khi thanh toán"},
+    {en:"I'll use self-checkout.",vi:"Tôi dùng máy tự thanh toán.",ph:"ai'll iu-z xeo-ph chek-ao-t.",ctx:"Chọn quầy tự thanh toán"},
+    {en:"Where is the queue?",vi:"Xếp hàng ở đâu?",ph:"whe-r ít đơ kiu?",ctx:"Hỏi chỗ xếp hàng chờ tính tiền"},
+    {en:"Is this reduced?",vi:"Cái này có giảm giá không?",ph:"ít đít ri-điu-st?",ctx:"Hỏi về hàng sắp hết hạn được giảm giá"},
+  ],
+  qa:[
+    {
+      q:"Do you have a loyalty card?",q_vi:"Bạn có thẻ tích điểm không?",
+      a:["Yes, here it is.","No, I don't have one.","No, can I get one?"],
+      a_vi:["Có, đây ạ.","Không, tôi chưa có.","Không, tôi có thể đăng ký không?"],
+      ctx:"Tesco Clubcard / Sainsbury's Nectar card"
+    },
+    {
+      q:"Would you like a bag?",q_vi:"Bạn có muốn túi đựng không?",
+      a:["Yes please, a bag for life.","No thank you, I have my own.","Yes, how much is it?"],
+      a_vi:["Vâng, cho tôi túi dùng lại.","Không cảm ơn, tôi có túi rồi.","Có, bao nhiêu tiền?"],
+      ctx:"Ở UK túi ni-lông tính tiền (10p), nên mua túi vải tốt hơn"
+    },
+    {
+      q:"Unexpected item in the bagging area.",q_vi:"Có vật lạ ở khu vực đặt đồ.",
+      a:["Sorry, let me move it.","I need assistance please.","Can you help me?"],
+      a_vi:["Xin lỗi, để tôi dời ra.","Tôi cần hỗ trợ.","Bạn có thể giúp tôi không?"],
+      ctx:"Thông báo hay gặp ở máy tự thanh toán"
+    },
+  ]
+},
+{
+  id:3,week:4,title:"Quán Café & Nhà Hàng",sub:"Café & Restaurant",
+  emoji:"☕",desc:"Gọi đồ uống, đặt bàn, tính tiền...",color:"#ec4899",
+  vocab:[
+    {en:"Coffee",vi:"Cà phê",ph:"co-phi"},
+    {en:"Flat white",vi:"Cà phê sữa đặc (UK phổ biến)",ph:"phlét uai-t"},
+    {en:"Americano",vi:"Cà phê đen pha loãng",ph:"ơ-me-ri-ca-nô"},
+    {en:"Latte",vi:"Cà phê sữa",ph:"la-tê"},
+    {en:"Tea",vi:"Trà",ph:"ti"},
+    {en:"Juice",vi:"Nước ép trái cây",ph:"ju-s"},
+    {en:"Still water",vi:"Nước không gas",ph:"xtil wo-tơ"},
+    {en:"Sparkling water",vi:"Nước có gas",ph:"xpa-kling wo-tơ"},
+    {en:"Menu",vi:"Thực đơn",ph:"men-yu"},
+    {en:"Bill",vi:"Hóa đơn / Tính tiền",ph:"bil"},
+    {en:"Waiter",vi:"Nhân viên phục vụ nam",ph:"uây-tơ"},
+    {en:"Waitress",vi:"Nhân viên phục vụ nữ",ph:"uây-trết"},
+    {en:"Table",vi:"Cái bàn",ph:"tây-bơl"},
+    {en:"Eat in",vi:"Ăn tại chỗ",ph:"it in"},
+    {en:"Takeaway",vi:"Mang về",ph:"têi-kơ-uây"},
+    {en:"Delicious",vi:"Ngon",ph:"đi-lish-ơs"},
+    {en:"Starter",vi:"Món khai vị",ph:"xta-tơ"},
+    {en:"Main course",vi:"Món chính",ph:"mên co-s"},
+    {en:"Dessert",vi:"Món tráng miệng",ph:"đi-zơ-t"},
+    {en:"Vegetarian",vi:"Món chay / Người ăn chay",ph:"vej-tơ-ria-ni-ơn"},
+    {en:"Allergen",vi:"Chất gây dị ứng",ph:"é-lơ-jần"},
+    {en:"Service charge",vi:"Phí phục vụ (thường 12.5% ở London)",ph:"xơ-vít cha-j"},
+  ],
+  phrases:[
+    {en:"A table for two, please.",vi:"Cho tôi bàn cho hai người.",ph:"ơ tây-bơl pho tu, pli-z.",ctx:"Vào nhà hàng, yêu cầu bàn"},
+    {en:"Eat in or takeaway?",vi:"Ăn tại chỗ hay mang về?",ph:"it in o têi-kơ-uây?",ctx:"Câu hỏi phổ biến tại quán café UK"},
+    {en:"One flat white, please.",vi:"Cho tôi một flat white.",ph:"oăn phlét uai-t, pli-z.",ctx:"Gọi cà phê phổ biến ở London"},
+    {en:"Can I see the menu?",vi:"Cho tôi xem thực đơn.",ph:"kền ai xi đơ men-yu?",ctx:"Xin menu khi ngồi vào bàn"},
+    {en:"Do you have vegetarian options?",vi:"Có món chay không?",ph:"du yu háv vej-tơ-ria-ni-ơn óp-shần-z?",ctx:"Hỏi về món ăn chay"},
+    {en:"This is delicious!",vi:"Ngon quá!",ph:"đít ít đi-lish-ơs!",ctx:"Khen món ăn"},
+    {en:"Can I have the bill, please?",vi:"Cho tôi hóa đơn.",ph:"kền ai háv đơ bil, pli-z?",ctx:"Yêu cầu thanh toán"},
+    {en:"Is service included?",vi:"Có tính tiền phục vụ chưa?",ph:"ít xơ-vít in-clu-đít?",ctx:"Hỏi về service charge ở UK"},
+  ],
+  qa:[
+    {
+      q:"Eat in or takeaway?",q_vi:"Ăn tại chỗ hay mang về?",
+      a:["Eat in, please.","Takeaway, please.","To go, please."],
+      a_vi:["Ăn tại chỗ, làm ơn.","Mang về, làm ơn.","Mang đi, làm ơn."],
+      ctx:"Câu hỏi đầu tiên tại Pret, Costa, Starbucks ở London"
+    },
+    {
+      q:"What size would you like?",q_vi:"Bạn muốn size nào?",
+      a:["Small, please.","Medium, please.","Large, please."],
+      a_vi:["Nhỏ, làm ơn.","Vừa, làm ơn.","Lớn, làm ơn."],
+      ctx:"Khi gọi cà phê hay đồ uống"
+    },
+    {
+      q:"Any allergies?",q_vi:"Bạn có dị ứng thực phẩm không?",
+      a:["No allergies, thank you.","I'm allergic to nuts.","I'm lactose intolerant."],
+      a_vi:["Không có dị ứng, cảm ơn.","Tôi dị ứng đậu hạt.","Tôi không dung nạp được lactose."],
+      ctx:"Nhà hàng UK hay hỏi để đảm bảo an toàn"
+    },
+  ]
+},
+{
+  id:4,week:5,title:"Đi Tàu Điện Ngầm",sub:"London Underground / Tube",
+  emoji:"🚇",desc:"Tàu Tube, thẻ Oyster, mua vé...",color:"#10b981",
+  vocab:[
+    {en:"Underground",vi:"Tàu điện ngầm (tên chính thức)",ph:"ăn-đơ-graon-d"},
+    {en:"Tube",vi:"Tàu điện ngầm (nói thân mật)",ph:"tiu-b"},
+    {en:"Oyster card",vi:"Thẻ Oyster (đi tàu điện London)",ph:"ói-xtơ ca-d"},
+    {en:"Contactless",vi:"Thẻ/điện thoại không chạm",ph:"cón-tác-lết"},
+    {en:"Zone",vi:"Vùng thu phí (London chia Zone 1-9)",ph:"zôn"},
+    {en:"Platform",vi:"Sân ga / Bến đón tàu",ph:"plét-pho-m"},
+    {en:"Line",vi:"Tuyến tàu (Central Line, Jubilee...)",ph:"lai-n"},
+    {en:"Station",vi:"Nhà ga",ph:"xtê-shần"},
+    {en:"Fare",vi:"Giá vé",ph:"phe"},
+    {en:"Top up",vi:"Nạp tiền (vào thẻ Oyster)",ph:"tóp ắp"},
+    {en:"Mind the gap",vi:"Chú ý khoảng cách (giữa tàu và sân ga)",ph:"mai-nd đơ gép"},
+    {en:"Exit",vi:"Lối ra",ph:"ek-xít"},
+    {en:"Entrance",vi:"Lối vào",ph:"en-trần-s"},
+    {en:"Delay",vi:"Tàu bị trễ",ph:"đi-lê"},
+    {en:"Next train",vi:"Chuyến tàu tiếp theo",ph:"nék-xt trên"},
+    {en:"Change trains",vi:"Đổi tàu / Chuyển tuyến",ph:"chênj trên-z"},
+    {en:"Bus",vi:"Xe buýt",ph:"bớt"},
+    {en:"Night bus",vi:"Xe buýt đêm",ph:"nai-t bớt"},
+    {en:"Travelcard",vi:"Vé không giới hạn chuyến",ph:"trá-vồl-ca-d"},
+    {en:"Lost property",vi:"Phòng đồ thất lạc",ph:"lót-t pró-pơ-ti"},
+    {en:"Touch in / Touch out",vi:"Chạm thẻ vào / Chạm thẻ ra",ph:"tắch in / tắch ao-t"},
+    {en:"Journey",vi:"Hành trình / Chuyến đi",ph:"jơ-ni"},
+  ],
+  phrases:[
+    {en:"Which line do I take to Oxford Circus?",vi:"Tôi đi tuyến nào đến Oxford Circus?",ph:"uích lai-n đu ai têi-k tu Ok-xphờt Xơ-kơt?",ctx:"Hỏi đường đi Tube"},
+    {en:"I need to top up my Oyster.",vi:"Tôi cần nạp tiền vào thẻ Oyster.",ph:"ai ni-d tu tóp ắp mai ói-xtơ.",ctx:"Nạp tiền tại máy hoặc cửa hàng"},
+    {en:"How do I get to King's Cross?",vi:"Tôi đến King's Cross bằng cách nào?",ph:"hao đu ai gét tu King's Cross?",ctx:"Hỏi đường đến ga nổi tiếng"},
+    {en:"Is this the right platform?",vi:"Đây có phải bến đúng không?",ph:"ít đít đơ rai-t plét-pho-m?",ctx:"Xác nhận đứng đúng bến"},
+    {en:"Mind the gap!",vi:"Chú ý khoảng cách!",ph:"mai-nd đơ gép!",ctx:"Thông báo trên loa tàu Tube"},
+    {en:"Do I need to change trains?",vi:"Tôi có cần đổi tàu không?",ph:"đu ai ni-d tu chênj trên-z?",ctx:"Hỏi về việc chuyển tuyến"},
+    {en:"The Tube is delayed.",vi:"Tàu Tube bị trễ.",ph:"đơ tiu-b ít đi-lêd.",ctx:"Thông báo về chậm trễ"},
+    {en:"Where is the lost property office?",vi:"Phòng đồ thất lạc ở đâu?",ph:"whe-r ít đơ lót-t pró-pơ-ti o-phít?",ctx:"Khi làm mất đồ trên tàu"},
+  ],
+  qa:[
+    {
+      q:"Please touch in with your Oyster or contactless.",q_vi:"Vui lòng chạm thẻ Oyster hoặc thẻ không chạm.",
+      a:["Of course, one moment.","Can I use my phone?","How do I top up?"],
+      a_vi:["Được chứ, một chút.","Tôi dùng điện thoại được không?","Tôi nạp tiền thế nào?"],
+      ctx:"Cần chạm thẻ cả khi vào lẫn khi ra để tính đúng tiền vé"
+    },
+    {
+      q:"Which station are you going to?",q_vi:"Bạn đi đến ga nào?",
+      a:["I'm going to Victoria.","Can you help me find the right line?","I want to go to Heathrow."],
+      a_vi:["Tôi đi đến Victoria.","Bạn có thể giúp tôi tìm đúng tuyến không?","Tôi muốn đến Heathrow."],
+      ctx:"Nhân viên ga hay hỏi để hướng dẫn"
+    },
+    {
+      q:"The service is suspended. Please use alternative routes.",q_vi:"Dịch vụ bị ngừng. Vui lòng đi đường khác.",
+      a:["OK, which bus should I take?","How long will it take?","Is there a replacement bus?"],
+      a_vi:["OK, tôi đi xe buýt số mấy?","Mất bao lâu?","Có xe buýt thay thế không?"],
+      ctx:"Thường gặp cuối tuần khi Tube bảo trì"
+    },
+  ]
+},
+{
+  id:5,week:6,title:"Mua Sắm Quần Áo",sub:"Clothes Shopping",
+  emoji:"👗",desc:"Thử đồ, đổi trả, High Street London...",color:"#f97316",
+  vocab:[
+    {en:"Changing room",vi:"Phòng thay đồ (UK dùng từ này)",ph:"chênj-inh rum"},
+    {en:"Fitting room",vi:"Phòng thử đồ (cũng dùng được)",ph:"phít-inh rum"},
+    {en:"Size",vi:"Kích cỡ",ph:"xai-z"},
+    {en:"Small (S)",vi:"Nhỏ",ph:"xmo-l"},
+    {en:"Medium (M)",vi:"Vừa",ph:"mi-đi-ơm"},
+    {en:"Large (L)",vi:"Lớn",ph:"la-j"},
+    {en:"Shirt",vi:"Áo sơ mi",ph:"shơ-t"},
+    {en:"Trousers",vi:"Quần dài (UK)",ph:"trao-zơ-z"},
+    {en:"Dress",vi:"Váy đầm",ph:"drét"},
+    {en:"Shoes",vi:"Giày dép",ph:"shu-z"},
+    {en:"Red",vi:"Màu đỏ",ph:"rét"},
+    {en:"Blue",vi:"Màu xanh dương",ph:"blu"},
+    {en:"Sale",vi:"Giảm giá",ph:"xêl"},
+    {en:"Discount",vi:"Chiết khấu",ph:"đít-kaon-t"},
+    {en:"Exchange",vi:"Đổi hàng",ph:"ék-xchênj"},
+    {en:"Refund",vi:"Hoàn tiền",ph:"ri-phănd"},
+    {en:"Receipt",vi:"Hóa đơn (cần để đổi trả)",ph:"ri-xit"},
+    {en:"High Street",vi:"Phố mua sắm chính (Oxford St, Carnaby St...)",ph:"hai xtrit"},
+    {en:"Charity shop",vi:"Cửa hàng từ thiện (đồ cũ rẻ)",ph:"ché-ri-ti shóp"},
+    {en:"Department store",vi:"Trung tâm thương mại (John Lewis, M&S...)",ph:"đi-pa-t-mơnt xto"},
+    {en:"Voucher",vi:"Phiếu giảm giá",ph:"vao-chơ"},
+    {en:"Last one",vi:"Còn một cái cuối",ph:"la-st oăn"},
+  ],
+  phrases:[
+    {en:"Can I try this on?",vi:"Tôi có thể thử cái này không?",ph:"kền ai trai đít ón?",ctx:"Xin thử quần áo trước khi mua"},
+    {en:"Where is the changing room?",vi:"Phòng thay đồ ở đâu?",ph:"whe-r ít đơ chênj-inh rum?",ctx:"UK dùng 'changing room', không phải 'fitting room'"},
+    {en:"Do you have a bigger size?",vi:"Có size lớn hơn không?",ph:"du yu háv ơ bí-gơ xai-z?",ctx:"Hỏi size phù hợp hơn"},
+    {en:"I'd like to exchange this.",vi:"Tôi muốn đổi cái này.",ph:"ai'd lai-k tu ék-xchênj đít.",ctx:"Đổi hàng sau khi mua"},
+    {en:"Can I get a refund?",vi:"Tôi có thể hoàn tiền không?",ph:"kền ai gét ơ ri-phănd?",ctx:"Trả hàng lấy lại tiền"},
+    {en:"I have the receipt.",vi:"Tôi có hóa đơn.",ph:"ai háv đơ ri-xit.",ctx:"Cần xuất trình hóa đơn khi đổi trả"},
+    {en:"Is there a sale on?",vi:"Đang có đợt giảm giá không?",ph:"ít đhe-r ơ xêl ón?",ctx:"Hỏi về khuyến mãi"},
+    {en:"This doesn't fit.",vi:"Cái này không vừa.",ph:"đít đớ-zn't phít.",ctx:"Khi quần áo không vừa người"},
+  ],
+  qa:[
+    {
+      q:"How many items?",q_vi:"Bạn có bao nhiêu món?",
+      a:["Three items, please.","Just one.","Two pieces."],
+      a_vi:["Ba món, làm ơn.","Chỉ một thôi.","Hai cái."],
+      ctx:"Câu hỏi trước khi vào phòng thử đồ"
+    },
+    {
+      q:"How did it fit?",q_vi:"Có vừa không?",
+      a:["It fits perfectly, I'll take it.","It's a bit too small.","Do you have the next size up?"],
+      a_vi:["Vừa lắm, tôi lấy.","Hơi nhỏ quá.","Có size to hơn không?"],
+      ctx:"Nhân viên hỏi sau khi bạn thử đồ"
+    },
+    {
+      q:"Do you have a receipt?",q_vi:"Bạn có hóa đơn không?",
+      a:["Yes, here it is.","No, I've lost it.","I paid by card — can you check?"],
+      a_vi:["Có, đây ạ.","Không, tôi mất rồi.","Tôi trả bằng thẻ — bạn kiểm tra được không?"],
+      ctx:"Cần hóa đơn khi đổi trả ở UK"
+    },
+  ]
+},
+{
+  id:6,week:7,title:"Hỏi Đường & Địa Điểm",sub:"Directions & Places",
+  emoji:"🗺️",desc:"Chỉ đường, tìm địa điểm ở London...",color:"#06b6d4",
+  vocab:[
+    {en:"Left",vi:"Trái",ph:"lép-t"},
+    {en:"Right",vi:"Phải",ph:"rai-t"},
+    {en:"Straight ahead",vi:"Đi thẳng",ph:"xtrait ơ-hét"},
+    {en:"Turn left",vi:"Rẽ trái",ph:"tơ-n lép-t"},
+    {en:"Turn right",vi:"Rẽ phải",ph:"tơ-n rai-t"},
+    {en:"Corner",vi:"Góc đường",ph:"co-nơ"},
+    {en:"Traffic light",vi:"Đèn giao thông",ph:"tré-phik lai-t"},
+    {en:"Crossroads",vi:"Ngã tư đường",ph:"crót-rôd-z"},
+    {en:"Roundabout",vi:"Vòng xuyến (rất nhiều ở UK)",ph:"raon-đơ-baot"},
+    {en:"Chemist",vi:"Nhà thuốc (Boots, Lloyds...)",ph:"ke-mít"},
+    {en:"Pharmacy",vi:"Nhà thuốc (cũng dùng được)",ph:"pha-mơ-xi"},
+    {en:"Post Office",vi:"Bưu điện",ph:"pôt o-phít"},
+    {en:"Library",vi:"Thư viện công cộng",ph:"lai-brơ-ri"},
+    {en:"Park",vi:"Công viên",ph:"pa-k"},
+    {en:"Bank",vi:"Ngân hàng",ph:"benh-k"},
+    {en:"Hospital",vi:"Bệnh viện",ph:"hót-pi-tồl"},
+    {en:"Near",vi:"Gần",ph:"ni-ơ"},
+    {en:"Next to",vi:"Bên cạnh",ph:"nék-xt tu"},
+    {en:"Across from",vi:"Đối diện với",ph:"ơ-crót phrom"},
+    {en:"On the left",vi:"Bên tay trái",ph:"ón đơ lép-t"},
+    {en:"On the right",vi:"Bên tay phải",ph:"ón đơ rai-t"},
+    {en:"How far?",vi:"Xa bao nhiêu?",ph:"hao pha?"},
+  ],
+  phrases:[
+    {en:"Excuse me, where is the chemist?",vi:"Xin lỗi, nhà thuốc ở đâu?",ph:"ek-xkiu mi, whe-r ít đơ ke-mít?",ctx:"Tìm nhà thuốc (Boots rất phổ biến ở London)"},
+    {en:"Turn left at the traffic light.",vi:"Rẽ trái ở đèn đỏ.",ph:"tơ-n lép-t ét đơ tré-phik lai-t.",ctx:"Hướng dẫn đường"},
+    {en:"Go straight ahead and then turn right.",vi:"Đi thẳng rồi rẽ phải.",ph:"gô xtrait ơ-hét ển đhen tơ-n rai-t.",ctx:"Chỉ đường 2 bước"},
+    {en:"It's on the left, next to the post office.",vi:"Ở bên trái, cạnh bưu điện.",ph:"ít's ón đơ lép-t, nék-xt tu đơ pôt o-phít.",ctx:"Mô tả vị trí bằng mốc gần đó"},
+    {en:"How far is it on foot?",vi:"Đi bộ có xa không?",ph:"hao pha ít ít ón phút?",ctx:"Hỏi khoảng cách khi đi bộ"},
+    {en:"Is it walkable from here?",vi:"Có thể đi bộ từ đây không?",ph:"ít ít wo-kơ-bồl phrom hi-ơ?",ctx:"Hỏi có cần đi tàu/xe không"},
+    {en:"Can you show me on Google Maps?",vi:"Bạn có thể chỉ trên Google Maps không?",ph:"kền yu xô mi ón Gu-gồl Mép-s?",ctx:"Nhờ chỉ đường qua điện thoại"},
+  ],
+  qa:[
+    {
+      q:"Sorry, I don't know this area very well.",q_vi:"Xin lỗi, tôi không rành khu này lắm.",
+      a:["That's OK, thank you anyway.","Can you try Google Maps?","No problem, I'll ask someone else."],
+      a_vi:["Không sao, cảm ơn bạn.","Bạn có thể thử Google Maps không?","Không sao, tôi hỏi người khác."],
+      ctx:"Người được hỏi không biết đường"
+    },
+    {
+      q:"Is it far?",q_vi:"Có xa không?",
+      a:["About ten minutes on foot.","It's just around the corner.","You'd better take the Tube."],
+      a_vi:["Khoảng mười phút đi bộ.","Chỉ quanh góc phố thôi.","Bạn nên đi Tube thì hơn."],
+      ctx:"Câu hỏi thông dụng khi hỏi đường"
+    },
+    {
+      q:"Do you know where Boots is?",q_vi:"Bạn có biết Boots ở đâu không?",
+      a:["Yes, it's on the high street.","Turn right and it's on your left.","There's one in the shopping centre."],
+      a_vi:["Có, ở phố mua sắm chính.","Rẽ phải rồi bên tay trái bạn.","Có một cái trong trung tâm mua sắm."],
+      ctx:"Boots là chuỗi nhà thuốc phổ biến nhất UK"
+    },
+  ]
+},
+{
+  id:7,week:8,title:"Sức Khỏe & Khẩn Cấp",sub:"Health & Emergency (UK)",
+  emoji:"🏥",desc:"999, NHS, GP, A&E — hệ thống y tế UK...",color:"#ef4444",
+  vocab:[
+    {en:"Emergency",vi:"Khẩn cấp",ph:"i-mơ-jần-xi"},
+    {en:"999",vi:"Số cấp cứu UK (Police/Fire/Ambulance)",ph:"nai-n nai-n nai-n"},
+    {en:"111",vi:"Đường dây NHS tư vấn (không khẩn cấp)",ph:"oăn oăn oăn"},
+    {en:"NHS",vi:"Hệ thống y tế quốc gia UK (miễn phí)",ph:"en êch et"},
+    {en:"A&E",vi:"Phòng cấp cứu (Accident & Emergency)",ph:"ê ền i"},
+    {en:"GP",vi:"Bác sĩ gia đình (General Practitioner)",ph:"ji pi"},
+    {en:"GP surgery",vi:"Phòng khám bác sĩ gia đình",ph:"ji pi xơ-jơ-ri"},
+    {en:"Ambulance",vi:"Xe cứu thương",ph:"em-biu-lần-s"},
+    {en:"Hospital",vi:"Bệnh viện",ph:"hót-pi-tồl"},
+    {en:"Doctor",vi:"Bác sĩ",ph:"đóc-tơ"},
+    {en:"Nurse",vi:"Y tá",ph:"nơ-s"},
+    {en:"Chemist",vi:"Nhà thuốc (Boots là phổ biến nhất)",ph:"ke-mít"},
+    {en:"Prescription",vi:"Đơn thuốc",ph:"prí-xcrip-shần"},
+    {en:"Appointment",vi:"Lịch hẹn khám bệnh",ph:"ơ-poi-nt-mơnt"},
+    {en:"I'm sick",vi:"Tôi bị bệnh / ốm",ph:"ai'm xik"},
+    {en:"I'm hurt",vi:"Tôi bị thương",ph:"ai'm hơ-t"},
+    {en:"Pain",vi:"Đau",ph:"pên"},
+    {en:"Headache",vi:"Đau đầu",ph:"hét-êik"},
+    {en:"Fever",vi:"Sốt",ph:"phi-vơ"},
+    {en:"Allergy",vi:"Dị ứng",ph:"é-lơ-ji"},
+    {en:"I don't understand",vi:"Tôi không hiểu",ph:"ai đôn-t ăn-đờ-xtend"},
+    {en:"Please speak slowly",vi:"Nói chậm thôi nhé",ph:"pli-z xpik xlô-li"},
+  ],
+  phrases:[
+    {en:"Help! I need help!",vi:"Cứu tôi! Tôi cần giúp đỡ!",ph:"heo-p! ai ni-d heo-p!",ctx:"Tình huống khẩn cấp"},
+    {en:"Please call 999.",vi:"Làm ơn gọi 999.",ph:"pli-z co-l nai-n nai-n nai-n.",ctx:"Khẩn cấp: cảnh sát, cứu hỏa, cấp cứu"},
+    {en:"I need to see a GP.",vi:"Tôi cần gặp bác sĩ gia đình.",ph:"ai ni-d tu xi ơ ji pi.",ctx:"Đặt lịch khám không khẩn cấp qua NHS"},
+    {en:"I'd like to make an appointment.",vi:"Tôi muốn đặt lịch hẹn.",ph:"ai'd lai-k tu mêik ơn ơ-poi-nt-mơnt.",ctx:"Gọi điện cho GP surgery để đặt hẹn"},
+    {en:"Where is the nearest A&E?",vi:"Phòng cấp cứu gần nhất ở đâu?",ph:"whe-r ít đơ ni-ơ-rét ê ền i?",ctx:"Tìm A&E trong trường hợp khẩn cấp"},
+    {en:"I have chest pain.",vi:"Tôi bị đau ngực.",ph:"ai háv chest pên.",ctx:"Triệu chứng cần đến A&E ngay"},
+    {en:"I don't understand. Please speak slowly.",vi:"Tôi không hiểu. Nói chậm thôi nhé.",ph:"ai đôn-t ăn-đờ-xtend. pli-z xpik xlô-li.",ctx:"Khi không theo kịp người Anh nói"},
+    {en:"Can you write it down?",vi:"Bạn có thể viết ra không?",ph:"kền yu rai-t ít đaon?",ctx:"Nhờ viết thay vì nói cho dễ hiểu"},
+  ],
+  qa:[
+    {
+      q:"What's the problem?",q_vi:"Bạn có vấn đề gì?",
+      a:["I have a headache and fever.","My stomach hurts.","I feel very dizzy."],
+      a_vi:["Tôi bị đau đầu và sốt.","Bụng tôi bị đau.","Tôi cảm thấy rất chóng mặt."],
+      ctx:"Câu hỏi của bác sĩ hoặc nhân viên y tế"
+    },
+    {
+      q:"Have you registered with a GP?",q_vi:"Bạn đã đăng ký bác sĩ gia đình chưa?",
+      a:["Yes, my GP is at the local surgery.","No, how do I register?","Not yet, I just moved here."],
+      a_vi:["Rồi, GP của tôi ở phòng khám gần nhà.","Chưa, tôi đăng ký thế nào?","Chưa, tôi mới chuyển đến đây."],
+      ctx:"Cần đăng ký GP để được chăm sóc y tế NHS miễn phí"
+    },
+    {
+      q:"Is it an emergency?",q_vi:"Có phải trường hợp khẩn cấp không?",
+      a:["Yes, please call 999.","No, I just need some advice.","I'm not sure — it's been hurting for two days."],
+      a_vi:["Có, làm ơn gọi 999.","Không, tôi chỉ cần tư vấn thôi.","Tôi không chắc — bị đau hai ngày rồi."],
+      ctx:"Câu hỏi của đường dây 111 khi bạn gọi"
+    },
+  ]
+},
+];
+
+// ============================================================
+// STATE
+// ============================================================
+let curLesson = 0, curCard = 0, curTab = 'vocab';
+let quiz = null;
+let fcRevealed = false;
+let qaHideAnswers = false;
+
+// ============================================================
+// PROGRESS
+// ============================================================
+function getProg(){
+  try{ return JSON.parse(_ls(progKey())||'{"done":[],"quizzes":{}}'); }
+  catch(e){ return {done:[],quizzes:{}}; }
+}
+function saveProg(p){ _ls(progKey(), JSON.stringify(p)); }
+
+function markDone(btn){
+  _saveDone();
+  const orig = btn.textContent;
+  btn.textContent = '🎉 Đã lưu! Bài hoàn thành!';
+  btn.style.background = '#d1fae5';
+  btn.style.color = '#065f46';
+  setTimeout(()=>{ btn.textContent = orig; btn.style.background=''; btn.style.color=''; }, 2000);
+}
+function _saveDone(){
+  const p = getProg();
+  if(!p.done.includes(curLesson)){ p.done.push(curLesson); saveProg(p); }
+  updateHomeUI();
+  renderLessonList();
+}
+
+function recordQuiz(lessonId, score, total){
+  const p = getProg();
+  const prev = p.quizzes[lessonId];
+  if(!prev || score > prev.score){ p.quizzes[lessonId] = {score, total, passed: score>=PASS}; }
+  saveProg(p);
+}
+
+// ============================================================
+// SPEECH
+// ============================================================
+function speak(text){
+  if(!window.speechSynthesis){ return; }
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'en-US';
+  u.rate = 0.8;
+  u.pitch = 1;
+  window.speechSynthesis.speak(u);
+}
+function speakCur(){ speak(LESSONS[curLesson].vocab[curCard].en); }
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function nav(pg){
+  ['home','progress'].forEach(id=>{
+    document.getElementById('pg-'+id).classList.toggle('on', id===pg);
+    document.getElementById('n-'+id).classList.toggle('on', id===pg);
+  });
+  document.getElementById('pg-lesson').classList.remove('on');
+  if(pg==='home') updateHomeUI();
+  if(pg==='progress') updateProgressPage();
+  window.scrollTo(0,0);
+}
+
+function goHome(){
+  nav('home');
+}
+
+function openLesson(id){
+  curLesson = id;
+  curCard = 0;
+  curTab = 'vocab';
+  fcRevealed = false;
+  qaHideAnswers = false;
+  // Show lesson page
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  document.getElementById('pg-lesson').classList.add('on');
+  // Render
+  renderLessonHeader();
+  showTab('vocab');
+  window.scrollTo(0,0);
+}
+
+function showTab(tab){
+  curTab = tab;
+  ['vocab','phrases','qa','quiz'].forEach(t=>{
+    document.getElementById('tc-'+t).classList.toggle('hidden', t!==tab);
+    document.getElementById('t-'+t).classList.toggle('on', t===tab);
+  });
+  if(tab==='vocab'){ renderFlashcard(); renderVocabList(); }
+  if(tab==='phrases'){ renderPhrases(); }
+  if(tab==='qa'){ renderQA(); }
+  if(tab==='quiz'){ startQuiz(); }
+}
+
+// ============================================================
+// RENDER HOME
+// ============================================================
+function renderLessonList(){
+  const p = getProg();
+  document.getElementById('lesson-list').innerHTML = LESSONS.map(l=>{
+    const done = p.done.includes(l.id);
+    return `<button class="lcard${done?' done':''}" onclick="openLesson(${l.id})">
+      <span class="lem">${l.emoji}</span>
+      <div class="li">
+        <div class="lw">Tuần ${l.week}</div>
+        <div class="lt">${l.title}</div>
+        <div class="ld">${l.desc}</div>
+      </div>
+      <span class="ls">${done?'✅':'▶️'}</span>
+    </button>`;
+  }).join('');
+}
+
+function updateHomeUI(){
+  const p = getProg();
+  const done = p.done.length, total = LESSONS.length;
+  const pct = Math.round(done/total*100);
+  document.getElementById('home-pbar').style.width = pct+'%';
+  document.getElementById('home-ptxt').textContent = `${done}/${total} bài học`;
+  document.getElementById('home-ppct').textContent = pct+'%';
+  let w=0, ph=0;
+  p.done.forEach(id=>{ const l=LESSONS[id]; if(l){ w+=l.vocab.length; ph+=l.phrases.length; } });
+  document.getElementById('h-words').textContent = w;
+  document.getElementById('h-phrases').textContent = ph;
+}
+
+// ============================================================
+// RENDER LESSON HEADER
+// ============================================================
+function renderLessonHeader(){
+  const l = LESSONS[curLesson];
+  document.getElementById('les-hdr').innerHTML = `
+    <div class="card" style="background:linear-gradient(135deg,${l.color}18,${l.color}08);border-color:${l.color}33;margin-bottom:14px;text-align:center;">
+      <div style="font-size:48px;margin-bottom:8px;">${l.emoji}</div>
+      <span class="wbadge" style="background:${l.color}">Tuần ${l.week}</span>
+      <div style="font-size:22px;font-weight:900;color:${l.color};margin:6px 0 3px;">${l.title}</div>
+      <div style="font-size:14px;color:var(--muted);">${l.sub}</div>
+    </div>`;
+}
+
+// ============================================================
+// FLASHCARD
+// ============================================================
+function renderFlashcard(){
+  const v = LESSONS[curLesson].vocab;
+  const c = v[curCard];
+  document.getElementById('fc-en').textContent = c.en;
+  document.getElementById('fc-ph').textContent = '📣 đọc: ' + c.ph;
+  document.getElementById('fc-vi').textContent = '🇻🇳 ' + c.vi;
+  document.getElementById('cnum').textContent = `${curCard+1} / ${v.length}`;
+  const wrap = document.getElementById('fc-vi-wrap');
+  const hint = document.getElementById('fc-hint');
+  if(wrap) wrap.style.display = fcRevealed ? '' : 'none';
+  if(hint) hint.style.display = fcRevealed ? 'none' : '';
+}
+
+function revealCard(){
+  fcRevealed = true;
+  const wrap = document.getElementById('fc-vi-wrap');
+  const hint = document.getElementById('fc-hint');
+  if(wrap) wrap.style.display = '';
+  if(hint) hint.style.display = 'none';
+  speakCur();
+}
+
+function nextCard(){
+  const v = LESSONS[curLesson].vocab;
+  if(curCard < v.length-1){ curCard++; fcRevealed=false; renderFlashcard(); }
+}
+function prevCard(){
+  if(curCard > 0){ curCard--; fcRevealed=false; renderFlashcard(); }
+}
+
+function renderVocabList(){
+  const v = LESSONS[curLesson].vocab;
+  document.getElementById('vocab-list').innerHTML = `
+    <div class="sec-ttl" style="margin-top:6px;">📋 Danh sách đầy đủ</div>
+    ${v.map((w,i)=>`
+    <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:#fff;border-radius:12px;margin-bottom:8px;border:1px solid var(--border);">
+      <div style="flex:1;">
+        <div style="font-size:18px;font-weight:800;color:var(--blue);">${w.en}</div>
+        <div style="font-size:13px;color:#0284c7;font-style:italic;">📣 ${w.ph}</div>
+        <div style="font-size:16px;color:var(--text);">🇻🇳 ${w.vi}</div>
+      </div>
+      <button class="abtn spk-v" data-i="${i}" style="padding:8px 12px;font-size:14px;">🔊</button>
+    </div>`).join('')}`;
+  document.querySelectorAll('#vocab-list .spk-v').forEach(b=>{
+    b.onclick = ()=>speak(v[+b.dataset.i].en);
+  });
+}
+
+// ============================================================
+// QA DIALOGUE
+// ============================================================
+function toggleQAMode(){
+  qaHideAnswers = !qaHideAnswers;
+  const btn = document.getElementById('qa-toggle-btn');
+  if(btn) btn.textContent = qaHideAnswers ? '👁️ Hiện đáp án' : '🙈 Ẩn đáp án';
+  renderQA();
+}
+
+function _qaAnsHtml(item, i){
+  return `<div class="qa-ans">
+    ${item.a.map((ans,j)=>`
+    <div class="qa-opt">
+      <div class="qa-en">"${ans}"</div>
+      <div class="qa-vi">${item.a_vi[j]}</div>
+      <div style="margin-top:8px;"><button class="abtn spk-a" data-qi="${i}" data-ai="${j}" style="padding:7px 14px;font-size:14px;">🔊 Nghe</button></div>
+    </div>`).join('')}
+  </div>`;
+}
+
+function renderQA(){
+  const l = LESSONS[curLesson];
+  const el = document.getElementById('qa-list');
+  el.innerHTML = l.qa.map((item,i)=>`
+    <div class="qa-item">
+      <div class="qa-lbl">❓ Người khác nói / hỏi bạn:</div>
+      <div class="qa-q">
+        <div class="qa-en">"${item.q}"</div>
+        <div class="qa-vi">${item.q_vi}</div>
+        <div style="margin-top:8px;"><button class="abtn spk-q" data-i="${i}" style="padding:7px 14px;font-size:14px;">🔊 Nghe</button></div>
+      </div>
+      <div class="qa-lbl" style="margin-bottom:6px;">✅ Bạn có thể trả lời:</div>
+      ${qaHideAnswers
+        ? `<div id="qa-reveal-${i}">
+             <button class="btn btn-lt btn-sm btn-w qa-reveal-btn" data-qi="${i}" style="border:2px dashed #93c5fd;">
+               🔍 Nhấn để xem gợi ý câu trả lời
+             </button>
+           </div>`
+        : _qaAnsHtml(item, i)
+      }
+      ${item.ctx?`<div class="qa-ctx">💡 ${item.ctx}</div>`:''}
+    </div>`).join('');
+
+  document.querySelectorAll('#qa-list .spk-q').forEach(b=>{
+    b.onclick = ()=>speak(l.qa[+b.dataset.i].q);
+  });
+  document.querySelectorAll('#qa-list .spk-a').forEach(b=>{
+    b.onclick = ()=>speak(l.qa[+b.dataset.qi].a[+b.dataset.ai]);
+  });
+  document.querySelectorAll('#qa-list .qa-reveal-btn').forEach(b=>{
+    b.onclick = ()=>{
+      const qi = +b.dataset.qi;
+      const container = document.getElementById(`qa-reveal-${qi}`);
+      container.innerHTML = _qaAnsHtml(l.qa[qi], qi);
+      container.querySelectorAll('.spk-a').forEach(rb=>{
+        rb.onclick = ()=>speak(l.qa[+rb.dataset.qi].a[+rb.dataset.ai]);
+      });
+    };
+  });
+}
+
+// ============================================================
+// PHRASES
+// ============================================================
+function renderPhrases(){
+  const l = LESSONS[curLesson];
+  document.getElementById('ph-list').innerHTML = l.phrases.map((p,i)=>`
+    <div class="ph-item">
+      <div class="ph-en">"${p.en}"</div>
+      <div class="ph-ph">📣 ${p.ph}</div>
+      <div class="ph-vi">🇻🇳 ${p.vi}</div>
+      ${p.ctx?`<div class="ph-ctx">💡 ${p.ctx}</div>`:''}
+      <div style="margin-top:10px;">
+        <button class="abtn spk-p" data-i="${i}">🔊 Nghe phát âm</button>
+      </div>
+    </div>`).join('');
+  document.querySelectorAll('#ph-list .spk-p').forEach(b=>{
+    b.onclick = ()=>speak(l.phrases[+b.dataset.i].en);
+  });
+}
+
+// ============================================================
+// QUIZ  — 10 câu, cần 7/10 để qua môn
+// ============================================================
+const PASS = 7;
+
+function startQuiz(){
+  const v = [...LESSONS[curLesson].vocab].sort(()=>Math.random()-.5);
+  const ph = [...LESSONS[curLesson].phrases].sort(()=>Math.random()-.5);
+  const qs = [];
+  // 8 câu từ vựng (xen kẽ VI→EN và EN→VI)
+  for(let i=0;i<8;i++){
+    qs.push({ type:'vocab', item: v[i % v.length], dir: i%2===0?'vi2en':'en2vi' });
+  }
+  // 2 câu từ câu mẫu (hiểu câu tiếng Anh → chọn nghĩa tiếng Việt)
+  for(let i=0;i<2&&i<ph.length;i++){
+    qs.push({ type:'phrase', item: ph[i] });
+  }
+  qs.sort(()=>Math.random()-.5);
+  quiz = { qs, cur:0, score:0, ans:false };
+  renderQ();
+}
+
+function _quizDots(){
+  return quiz.qs.map((_,i)=>{
+    const col = i<quiz.cur ? 'var(--green)' : i===quiz.cur ? 'var(--blue)' : 'var(--border)';
+    return `<span style="width:22px;height:8px;border-radius:4px;background:${col};display:inline-block;"></span>`;
+  }).join('');
+}
+function _quizHeader(){
+  return `<div style="margin-bottom:14px;">
+    <div style="display:flex;gap:4px;justify-content:center;margin-bottom:6px;">${_quizDots()}</div>
+    <div style="text-align:center;font-size:13px;color:var(--muted);font-weight:700;">
+      Câu ${quiz.cur+1}/10 &nbsp;|&nbsp; Đúng: <b style="color:var(--green)">${quiz.score}</b> &nbsp;|&nbsp; Cần <b style="color:#dc2626">${PASS}</b>/10 để qua môn
+    </div>
+  </div>`;
+}
+
+function renderQ(){
+  const el = document.getElementById('quiz-area');
+  if(quiz.cur >= quiz.qs.length){ finishQuiz(); return; }
+  const q = quiz.qs[quiz.cur];
+
+  if(q.type==='phrase'){
+    // Câu hỏi từ câu mẫu: đọc câu tiếng Anh → chọn nghĩa tiếng Việt
+    const item = q.item;
+    const allPh = LESSONS[curLesson].phrases;
+    const wrong = allPh.filter(p=>p.en!==item.en).sort(()=>Math.random()-.5).slice(0,3);
+    const opts = [...wrong, item].sort(()=>Math.random()-.5);
+    el.innerHTML = `${_quizHeader()}
+      <div class="qbox">
+        <div style="font-size:22px;">💬 Câu này nghĩa là gì?</div>
+        <div style="font-size:19px;font-weight:800;line-height:1.4;">"${item.en}"</div>
+        <div class="qsub">Chọn nghĩa tiếng Việt đúng</div>
+      </div>
+      <div class="qopts" style="grid-template-columns:1fr;">
+        ${opts.map((o,i)=>`<button class="qopt" data-i="${i}" style="font-size:15px;text-align:left;padding:14px 16px;">${o.vi}</button>`).join('')}
+      </div>
+      <div id="qfb" style="text-align:center;font-size:17px;font-weight:700;min-height:32px;margin-top:4px;"></div>`;
+    document.querySelectorAll('.qopt').forEach((b,i)=>{
+      b.onclick = ()=>ansQ(opts[i], item, false, b);
+    });
+    return;
+  }
+
+  // Câu hỏi từ vựng (loại cũ)
+  const {item, dir} = q;
+  const all = LESSONS[curLesson].vocab;
+  const isVI2EN = dir==='vi2en';
+  const wrong = all.filter(v=>v.en!==item.en).sort(()=>Math.random()-.5).slice(0,3);
+  const opts = [...wrong, item].sort(()=>Math.random()-.5);
+  el.innerHTML = `${_quizHeader()}
+    <div class="qbox">
+      <div style="font-size:28px;">${isVI2EN?'🇻🇳':'🇬🇧'}</div>
+      <div>"${isVI2EN?item.vi:item.en}"</div>
+      <div class="qsub">${isVI2EN?'Chọn từ tiếng Anh đúng':'Chọn nghĩa tiếng Việt đúng'}</div>
+    </div>
+    <div class="qopts">
+      ${opts.map((o,i)=>`<button class="qopt" data-i="${i}">${isVI2EN?o.en:o.vi}</button>`).join('')}
+    </div>
+    <div id="qfb" style="text-align:center;font-size:17px;font-weight:700;min-height:32px;margin-top:4px;"></div>`;
+  document.querySelectorAll('.qopt').forEach((b,i)=>{
+    b.onclick = ()=>ansQ(opts[i], item, isVI2EN, b);
+  });
+}
+
+function ansQ(selected, correct, isVI2EN, btn){
+  if(quiz.ans) return;
+  quiz.ans = true;
+  document.querySelectorAll('.qopt').forEach(b=>b.style.pointerEvents='none');
+  const fb = document.getElementById('qfb');
+  const isCorrect = selected.en === correct.en;
+  if(isCorrect){
+    btn.classList.add('ok');
+    quiz.score++;
+    fb.innerHTML = '<span style="color:var(--green)">✅ Đúng rồi! Giỏi lắm!</span>';
+    speak(correct.en);
+  } else {
+    btn.classList.add('no');
+    const correctLabel = isVI2EN ? correct.en : correct.vi;
+    document.querySelectorAll('.qopt').forEach(b=>{ if(b.textContent.trim()===correctLabel) b.classList.add('ok'); });
+    fb.innerHTML = `<span style="color:#dc2626">❌ Sai! Đáp án đúng: <b>${correctLabel}</b></span>`;
+  }
+  setTimeout(()=>{ quiz.cur++; quiz.ans=false; renderQ(); }, 1900);
+}
+
+function finishQuiz(){
+  const el = document.getElementById('quiz-area');
+  const s=quiz.score, pct=Math.round(s/10*100);
+  const passed = s>=PASS;
+  recordQuiz(curLesson, s, 10);
+  if(passed) _saveDone();
+
+  const em = s===10?'🏆':passed?'🎉':'💪';
+  const badge = passed
+    ? `<div style="display:inline-block;background:#d1fae5;color:#065f46;border:2px solid #6ee7b7;border-radius:100px;padding:8px 22px;font-size:17px;font-weight:900;margin:12px 0;">✅ QUA MÔN!</div>`
+    : `<div style="display:inline-block;background:#fef2f2;color:#dc2626;border:2px solid #fca5a5;border-radius:100px;padding:8px 22px;font-size:17px;font-weight:900;margin:12px 0;">❌ CHƯA QUA — cần ${PASS}/10</div>`;
+  const note = passed
+    ? `<div style="font-size:15px;color:var(--muted);">Bài học đã được ghi hoàn thành! 🌟</div>`
+    : `<div style="font-size:15px;color:var(--muted);">Ôn lại từ vựng rồi thử lại, bạn làm được!</div>`;
+  const actions = passed
+    ? `<button class="btn btn-o" onclick="startQuiz()">🔄 Làm lại</button>
+       <button class="btn btn-g" onclick="goHome()">🏠 Trang chủ</button>`
+    : `<button class="btn btn-p" onclick="startQuiz()">🔄 Thử lại ngay</button>
+       <button class="btn btn-lt" onclick="showTab('vocab')">📖 Ôn từ vựng</button>`;
+
+  el.innerHTML = `<div class="card" style="text-align:center;padding:28px;">
+    <div style="font-size:64px;margin-bottom:6px;">${em}</div>
+    <div style="font-size:58px;font-weight:900;color:${passed?'var(--green)':'#dc2626'};">${s}/10</div>
+    <div style="font-size:16px;color:var(--muted);">${pct}% số câu đúng</div>
+    ${badge}${note}
+    <div style="display:flex;gap:10px;justify-content:center;margin-top:20px;flex-wrap:wrap;">${actions}</div>
+  </div>`;
+}
+
+// ============================================================
+// PROGRESS PAGE
+// ============================================================
+function updateProgressPage(){
+  const p = getProg();
+  const done = p.done.length;
+  let w=0, ph=0;
+  p.done.forEach(id=>{ const l=LESSONS[id]; if(l){ w+=l.vocab.length; ph+=l.phrases.length; } });
+  document.getElementById('p-done').textContent = done;
+  document.getElementById('p-words').textContent = w;
+  document.getElementById('p-phr').textContent = ph;
+  document.getElementById('p-quiz').textContent = Object.keys(p.quizzes).length;
+  document.getElementById('p-detail').innerHTML = LESSONS.map(l=>{
+    const isDone = p.done.includes(l.id);
+    const q = p.quizzes[l.id];
+    return `<div class="card" style="border-left:5px solid ${isDone?'var(--green)':'var(--border)'};margin-bottom:11px;">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span style="font-size:30px;">${l.emoji}</span>
+        <div style="flex:1;">
+          <div style="font-size:16px;font-weight:800;">Tuần ${l.week}: ${l.title}</div>
+          <div style="font-size:13px;color:var(--muted);margin-top:2px;">${l.vocab.length} từ vựng • ${l.phrases.length} câu mẫu</div>
+          ${q?`<div style="font-size:13px;margin-top:3px;color:${q.passed?'var(--green)':'#dc2626'};">${q.passed?'✅':'❌'} Quiz: ${q.score}/${q.total} điểm ${q.passed?'(Qua môn)':'(Chưa qua)'}</div>`:''}
+        </div>
+        <span style="font-size:24px;">${isDone?'✅':'⭕'}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function resetAll(){
+  if(confirm('Bạn có chắc muốn xóa toàn bộ tiến độ của '+curUser()+' và bắt đầu lại từ đầu không?')){
+    _ls(progKey(), JSON.stringify({done:[],quizzes:{}}));
+    updateHomeUI();
+    renderLessonList();
+    updateProgressPage();
+    nav('home');
+  }
+}
+
+// ============================================================
+// INIT
+// ============================================================
+document.getElementById('name-inp').addEventListener('keypress', function(e){
+  if(e.key==='Enter') createUser();
+});
+if(!curUser()){
+  showLogin();
+} else {
+  updateProfileBtn();
+}
+renderLessonList();
+updateHomeUI();
+</script>
+</body>
+</html>
