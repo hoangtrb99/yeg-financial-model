@@ -9,6 +9,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'"
   href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&display=swap">
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -360,7 +363,7 @@ button,input,select{font-family:inherit;}
   <div style="text-align:center;margin-bottom:32px;width:100%;max-width:400px;">
     <div style="font-size:60px;margin-bottom:12px;">🇬🇧</div>
     <h1 style="font-size:26px;font-weight:900;color:var(--blue);margin-bottom:8px;">Tiếng Anh Giao Tiếp</h1>
-    <p style="color:var(--muted);font-size:16px;">Chọn tên của bạn để bắt đầu học</p>
+    <p style="color:var(--muted);font-size:16px;">Đăng nhập để lưu tiến độ học trên mọi thiết bị</p>
   </div>
 
   <div style="width:100%;max-width:400px;">
@@ -391,6 +394,27 @@ button,input,select{font-family:inherit;}
 
 <script>
 // ============================================================
+// FIREBASE CONFIG — điền vào từ Firebase Console
+// ============================================================
+const FB_CFG = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+const FB_ON = FB_CFG.apiKey !== "YOUR_API_KEY";
+
+let fbUser = null;
+let db = null;
+
+if(FB_ON){
+  firebase.initializeApp(FB_CFG);
+  db = firebase.firestore();
+}
+
+// ============================================================
 // PROFILE / USER SYSTEM
 // ============================================================
 const AVATARS = ['🧑','👩','👨','👵','👴','👧','👦','🧓'];
@@ -402,12 +426,85 @@ function _ls(k,v){
   catch(e){ return null; }
 }
 
+function _progKey(){
+  if(fbUser) return 'eng2m_p_uid_'+fbUser.uid;
+  const u = _ls('eng2m_cur')||'';
+  return u ? 'eng2m_p_'+u.replace(/\W/g,'_') : 'eng2m_p_guest';
+}
+
 function getUsers(){ try{ return JSON.parse(_ls('eng2m_users')||'[]'); }catch(e){ return []; } }
 function saveUsers(u){ _ls('eng2m_users', JSON.stringify(u)); }
-function curUser(){ return _ls('eng2m_cur')||''; }
+function curUser(){
+  if(fbUser) return fbUser.displayName || fbUser.email || 'Người dùng';
+  return _ls('eng2m_cur')||'';
+}
 function setCurUser(n){ _ls('eng2m_cur', n); }
-function progKey(){ const u=curUser(); return u?'eng2m_p_'+u.replace(/\W/g,'_'):'eng2m_p_guest'; }
 
+// ---- Firebase Auth ----
+function signInGoogle(){
+  if(!FB_ON) return;
+  const provider = new firebase.auth.GoogleAuthProvider();
+  firebase.auth().signInWithPopup(provider)
+    .catch(()=>firebase.auth().signInWithRedirect(provider));
+}
+
+function doSignOut(){
+  if(!confirm('Đăng xuất khỏi tài khoản Google?')) return;
+  fbUser = null;
+  if(FB_ON) firebase.auth().signOut();
+  updateProfileBtn();
+  refreshAll();
+  showLogin();
+}
+
+async function syncFromCloud(){
+  if(!db || !fbUser) return;
+  try{
+    const doc = await db.collection('users').doc(fbUser.uid).get();
+    if(doc.exists){
+      const data = doc.data();
+      if(data.progress){
+        const local = JSON.parse(_ls(_progKey())||'{"done":[],"quizzes":{}}');
+        const cloud = data.progress;
+        const merged = {
+          done:[...new Set([...(local.done||[]),...(cloud.done||[])])],
+          quizzes:Object.assign({},local.quizzes||{},cloud.quizzes||{})
+        };
+        _ls(_progKey(), JSON.stringify(merged));
+      }
+    }
+  }catch(e){ console.warn('syncFromCloud',e); }
+}
+
+async function _saveToCloud(prog){
+  if(!db || !fbUser) return;
+  try{
+    await db.collection('users').doc(fbUser.uid).set(
+      {name:fbUser.displayName,email:fbUser.email,lastSeen:new Date().toISOString(),progress:prog},
+      {merge:true}
+    );
+  }catch(e){ console.warn('_saveToCloud',e); }
+}
+
+function _afterAuth(){
+  updateProfileBtn();
+  refreshAll();
+  if(fbUser){
+    if(db) db.collection('users').doc(fbUser.uid).set({lastSeen:new Date().toISOString()},{merge:true}).catch(()=>{});
+    hideLogin();
+  } else if(!_ls('eng2m_cur')){
+    showLogin();
+  }
+}
+
+if(FB_ON){
+  firebase.auth().onAuthStateChanged(async user=>{
+    if(user){ fbUser=user; await syncFromCloud(); }
+    _afterAuth();
+  });
+}
+
+// ---- Login UI ----
 function showLogin(){
   renderPlist();
   document.getElementById('login-ov').classList.remove('hidden');
@@ -417,23 +514,40 @@ function showLogin(){
 function hideLogin(){ document.getElementById('login-ov').classList.add('hidden'); }
 
 function renderPlist(){
-  const users = getUsers();
   const el = document.getElementById('plist');
-  if(!users.length){
-    el.innerHTML = '<p style="text-align:center;color:var(--muted);font-size:15px;padding:16px 0 24px;">Chưa có ai. Tạo tên học của bạn bên dưới!</p>';
-    return;
+  let html = '';
+
+  if(FB_ON){
+    html += `<button onclick="signInGoogle()" style="display:flex;align-items:center;justify-content:center;gap:12px;
+      width:100%;padding:16px 20px;background:#fff;border:2px solid #e2e8f0;border-radius:16px;
+      font-size:17px;font-weight:800;color:#1e293b;cursor:pointer;margin-bottom:16px;
+      box-shadow:0 2px 8px rgba(0,0,0,.1);font-family:inherit;transition:all .2s;">
+      <svg width="22" height="22" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+      Đăng nhập với Google
+    </button>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+      <div style="flex:1;height:1px;background:var(--border);"></div>
+      <span style="font-size:13px;color:var(--muted);font-weight:600;">hoặc dùng tên cục bộ</span>
+      <div style="flex:1;height:1px;background:var(--border);"></div>
+    </div>`;
   }
-  el.innerHTML = '<div style="font-size:14px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Chọn tên của bạn:</div>'
-    + users.map((u,i)=>
-      '<button class="pcard" data-n="'+encodeURIComponent(u.name)+'">'
-      +'<div class="pavatar" style="background:'+u.color+'22;border:2px solid '+u.color+'44;">'+u.avatar+'</div>'
-      +'<div style="flex:1;">'
-      +'<div class="pname">'+u.name+'</div>'
-      +'<div class="psub">Học lần cuối: '+(u.lastSeen||'Chưa có')+'</div>'
-      +'</div>'
-      +'<span style="font-size:20px;color:var(--muted);">▶</span>'
-      +'</button>'
-    ).join('');
+
+  const users = getUsers();
+  if(users.length){
+    html += '<div style="font-size:14px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Chọn tên của bạn:</div>'
+      + users.map(u=>
+        '<button class="pcard" data-n="'+encodeURIComponent(u.name)+'">'
+        +'<div class="pavatar" style="background:'+u.color+'22;border:2px solid '+u.color+'44;">'+u.avatar+'</div>'
+        +'<div style="flex:1;"><div class="pname">'+u.name+'</div>'
+        +'<div class="psub">Học lần cuối: '+(u.lastSeen||'Chưa có')+'</div></div>'
+        +'<span style="font-size:20px;color:var(--muted);">▶</span>'
+        +'</button>'
+      ).join('');
+  } else if(!FB_ON){
+    html += '<p style="text-align:center;color:var(--muted);font-size:15px;padding:12px 0 20px;">Tạo tên học của bạn bên dưới!</p>';
+  }
+
+  el.innerHTML = html;
   el.querySelectorAll('.pcard').forEach(b=>{
     b.onclick = ()=>selectUser(decodeURIComponent(b.dataset.n));
   });
@@ -442,7 +556,7 @@ function renderPlist(){
 function selectUser(name){
   const users = getUsers();
   const u = users.find(u=>u.name===name);
-  if(u){ u.lastSeen = new Date().toLocaleDateString('vi-VN'); saveUsers(users); }
+  if(u){ u.lastSeen=new Date().toLocaleDateString('vi-VN'); saveUsers(users); }
   setCurUser(name);
   hideLogin();
   refreshAll();
@@ -466,8 +580,20 @@ function createUser(){
 
 function updateProfileBtn(){
   const btn = document.getElementById('profile-btn');
-  const name = curUser();
-  if(btn) btn.textContent = name ? '👤 '+name : '👤 Đăng nhập';
+  if(!btn) return;
+  if(fbUser){
+    const firstName = (fbUser.displayName||fbUser.email||'User').split(' ')[0];
+    if(fbUser.photoURL){
+      btn.innerHTML = `<img src="${fbUser.photoURL}" style="width:22px;height:22px;border-radius:50%;vertical-align:middle;margin-right:6px;">${firstName}`;
+    } else {
+      btn.textContent = '👤 '+firstName;
+    }
+    btn.onclick = doSignOut;
+  } else {
+    const name = _ls('eng2m_cur')||'';
+    btn.textContent = name ? '👤 '+name : '👤 Đăng nhập';
+    btn.onclick = showLogin;
+  }
 }
 
 function refreshAll(){
@@ -957,10 +1083,10 @@ let qaHideAnswers = false;
 // PROGRESS
 // ============================================================
 function getProg(){
-  try{ return JSON.parse(_ls(progKey())||'{"done":[],"quizzes":{}}'); }
+  try{ return JSON.parse(_ls(_progKey())||'{"done":[],"quizzes":{}}'); }
   catch(e){ return {done:[],quizzes:{}}; }
 }
-function saveProg(p){ _ls(progKey(), JSON.stringify(p)); }
+function saveProg(p){ _ls(_progKey(), JSON.stringify(p)); _saveToCloud(p); }
 
 function markDone(btn){
   _saveDone();
@@ -1387,7 +1513,8 @@ function updateProgressPage(){
 
 function resetAll(){
   if(confirm('Bạn có chắc muốn xóa toàn bộ tiến độ của '+curUser()+' và bắt đầu lại từ đầu không?')){
-    _ls(progKey(), JSON.stringify({done:[],quizzes:{}}));
+    _ls(_progKey(), JSON.stringify({done:[],quizzes:{}}));
+    _saveToCloud({done:[],quizzes:{}});
     updateHomeUI();
     renderLessonList();
     updateProgressPage();
@@ -1401,13 +1528,14 @@ function resetAll(){
 document.getElementById('name-inp').addEventListener('keypress', function(e){
   if(e.key==='Enter') createUser();
 });
-if(!curUser()){
-  showLogin();
-} else {
-  updateProfileBtn();
-}
 renderLessonList();
 updateHomeUI();
+if(!FB_ON){
+  // Local mode: show login if no user selected
+  if(!_ls('eng2m_cur')) showLogin();
+  else updateProfileBtn();
+}
+// Firebase mode: onAuthStateChanged handles login flow above
 </script>
 </body>
 </html>
