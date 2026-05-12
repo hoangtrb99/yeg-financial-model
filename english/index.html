@@ -470,8 +470,11 @@ function signInGoogle(){
   if(btn){ btn.textContent='⏳ Đang mở Google...'; btn.disabled=true; }
 
   if(isIOS()){
-    // iOS Safari không hỗ trợ popup → redirect thẳng
-    firebase.auth().signInWithRedirect(provider);
+    firebase.auth().signInWithRedirect(provider)
+      .catch(err=>{
+        if(btn){ btn.textContent='Đăng nhập với Google'; btn.disabled=false; }
+        if(errEl) errEl.textContent='Lỗi iOS: '+(err.code||err.message);
+      });
     return;
   }
   firebase.auth().signInWithPopup(provider)
