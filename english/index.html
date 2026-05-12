@@ -461,8 +461,19 @@ function signInGoogle(){
     return;
   }
   const provider = new firebase.auth.GoogleAuthProvider();
+  const errEl = document.getElementById('name-err');
   firebase.auth().signInWithPopup(provider)
-    .catch(()=>firebase.auth().signInWithRedirect(provider));
+    .catch(err=>{
+      // Popup bị chặn → dùng redirect
+      if(err.code==='auth/popup-blocked'){
+        firebase.auth().signInWithRedirect(provider);
+        return;
+      }
+      // User tự đóng popup → không làm gì
+      if(err.code==='auth/popup-closed-by-user'||err.code==='auth/cancelled-popup-request') return;
+      // Lỗi khác → hiện thông báo
+      if(errEl) errEl.textContent='Lỗi đăng nhập: '+(err.message||err.code);
+    });
 }
 
 function doSignOut(){
@@ -515,6 +526,7 @@ function _afterAuth(){
 }
 
 if(FB_ON){
+  firebase.auth().getRedirectResult().catch(()=>{});
   firebase.auth().onAuthStateChanged(async user=>{
     if(user){ fbUser=user; await syncFromCloud(); }
     _afterAuth();
