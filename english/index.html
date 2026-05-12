@@ -220,7 +220,7 @@ button,input,select{font-family:inherit;}
 }
 .hidden{display:none!important;}
 
-/* ── TABLET 600px ── */
+/* ── TABLET ── */
 @media(min-width:600px) and (max-width:899px){
   body{max-width:600px;margin:0 auto;}
   .bnav{max-width:600px;left:50%;transform:translateX(-50%);}
@@ -229,51 +229,94 @@ button,input,select{font-family:inherit;}
 /* ── DESKTOP 900px+ ── */
 @media(min-width:900px){
   body{
-    max-width:none;background:#dde3ee;
-    padding-bottom:0;
+    max-width:none;padding-bottom:0;
+    background:#eef0f5;
   }
-  /* Header */
-  .hdr{border-radius:0;padding:18px 40px;}
-  .hdr h1{font-size:26px;}
-  /* Bottom nav → top tab bar */
+  /* Header full-width, taller */
+  .hdr{padding:16px 32px;position:sticky;top:0;z-index:300;}
+  .hdr h1{font-size:24px;}
+
+  /* Sidebar (bottom nav → fixed left panel) */
   .bnav{
-    position:relative;bottom:auto;left:auto;right:auto;
+    position:fixed;top:64px;left:0;bottom:0;width:200px;
+    flex-direction:column;justify-content:flex-start;align-items:stretch;
+    border-top:none;border-right:2px solid var(--border);
+    box-shadow:2px 0 12px rgba(0,0,0,.06);
+    padding:16px 10px;gap:4px;background:#fff;overflow-y:auto;
     transform:none;max-width:none;
-    border-top:none;border-bottom:3px solid var(--border);
-    box-shadow:none;justify-content:center;gap:4px;padding:0 40px;
-    background:#fff;
   }
   .bnav-btn{
-    flex:none;flex-direction:row;gap:8px;
-    padding:14px 32px;font-size:15px;min-height:52px;
-    border-radius:10px 10px 0 0;
+    flex-direction:row;justify-content:flex-start;gap:12px;
+    padding:13px 16px;border-radius:12px;font-size:15px;
+    min-height:48px;width:100%;
   }
-  .bnav-btn span:first-child{font-size:20px;}
-  .bnav-btn.on{background:var(--blue-lt);border-bottom:3px solid var(--blue);margin-bottom:-3px;}
-  /* Pages */
-  .pg{max-width:1100px;margin:0 auto;padding:32px 40px;}
-  /* Home stats grid → 4 columns */
-  .sgrid{grid-template-columns:repeat(4,1fr);}
-  /* Lesson list → 2 columns */
-  #lesson-list{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .bnav-btn span:first-child{font-size:22px;flex-shrink:0;}
+  .bnav-btn.on{
+    background:var(--blue-lt);color:var(--blue);
+  }
+
+  /* All pages: offset for sidebar */
+  .pg{
+    margin-left:200px;
+    padding:32px 40px;
+    min-height:calc(100vh - 64px);
+    max-width:none;
+  }
+
+  /* Home: 2-col grid */
+  #pg-home{
+    display:grid;
+    grid-template-columns:1fr 340px;
+    grid-template-rows:auto;
+    gap:0 28px;
+    align-items:start;
+  }
+  #pg-home .banner{grid-column:1/-1;}
+  #pg-home .card:has(#home-pbar){grid-column:1/-1;}
+  .sgrid{grid-template-columns:repeat(4,1fr);grid-column:1/-1;}
+  #pg-home .tip{grid-column:1/-1;}
+  #pg-home .sec-ttl{grid-column:1;}
+  #lesson-list{grid-column:1;display:flex;flex-direction:column;gap:10px;}
   #lesson-list .lcard{margin-bottom:0;}
-  /* Lesson page → sidebar + content */
+
+  /* Lesson page: tabs left, content right */
   #pg-lesson{
-    max-width:1100px;margin:0 auto;padding:32px 40px;
-    display:grid;grid-template-columns:260px 1fr;
-    grid-template-rows:auto auto 1fr;gap:0 28px;
+    margin-left:200px;
+    display:grid;
+    grid-template-columns:220px 1fr;
+    gap:0 24px;
+    padding:28px 36px;
+    align-items:start;
   }
   #pg-lesson .back-btn{grid-column:1/-1;}
   #pg-lesson #les-hdr{grid-column:1/-1;}
-  #pg-lesson .tabs{grid-column:2;margin-bottom:18px;}
+  #pg-lesson .tabs{
+    grid-column:1;grid-row:3;
+    flex-direction:column;background:none;padding:0;
+    margin-bottom:0;position:sticky;top:90px;
+  }
+  #pg-lesson .tabs .tbtn{
+    border-radius:12px;text-align:left;padding:13px 16px;margin-bottom:4px;
+  }
+  #pg-lesson .tabs .tbtn.on{background:var(--blue);color:#fff;}
   #pg-lesson #tc-vocab,#pg-lesson #tc-phrases,
-  #pg-lesson #tc-qa,#pg-lesson #tc-quiz{grid-column:2;}
-  /* Login overlay wider */
-  .login-ov{padding:48px 40px 80px;}
-  /* Cards wider */
-  .fcard{padding:48px 32px;min-height:240px;}
-  .fcard .fen{font-size:52px;}
-  /* Quiz options 2 cols always */
+  #pg-lesson #tc-qa,#pg-lesson #tc-quiz{
+    grid-column:2;grid-row:3;
+  }
+  #pg-lesson > div:nth-child(3){grid-column:1/-1;} /* learning tip */
+
+  /* Progress page */
+  #pg-progress{margin-left:200px;padding:32px 40px;}
+  #pg-progress .sgrid{grid-template-columns:repeat(4,1fr);}
+
+  /* Login overlay */
+  .login-ov{padding:60px 40px;}
+
+  /* Flashcard bigger */
+  .fcard{min-height:260px;padding:48px 36px;}
+  .fcard .fen{font-size:56px;}
+
+  /* Quiz 2 cols */
   .qopts{grid-template-columns:1fr 1fr;}
 }
 </style>
