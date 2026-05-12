@@ -198,6 +198,50 @@ button,input,select{font-family:inherit;}
   background:#fff;color:var(--text);
 }
 .name-input:focus{border-color:var(--blue);}
+/* USER DROPDOWN MENU */
+.user-menu-wrap{position:absolute;top:10px;right:14px;z-index:9999;}
+.user-dropdown{
+  position:absolute;top:calc(100% + 8px);right:0;
+  background:#fff;border-radius:16px;
+  box-shadow:0 8px 32px rgba(0,0,0,.18),0 2px 8px rgba(0,0,0,.1);
+  border:1px solid var(--border);
+  min-width:230px;overflow:hidden;
+  animation:dropIn .15s ease;
+}
+@keyframes dropIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.udrop-info{
+  padding:16px;border-bottom:1px solid var(--border);
+  background:linear-gradient(135deg,#f0f9ff,#f8fafc);
+  display:flex;align-items:center;gap:12px;
+}
+.udrop-av{
+  width:46px;height:46px;border-radius:50%;object-fit:cover;flex-shrink:0;
+  border:2px solid rgba(37,99,235,.2);
+}
+.udrop-av-ph{
+  width:46px;height:46px;border-radius:50%;background:#eff6ff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;flex-shrink:0;border:2px solid rgba(37,99,235,.2);
+}
+.udrop-name{font-size:15px;font-weight:800;color:var(--text);}
+.udrop-email{font-size:12px;color:var(--muted);margin-top:2px;word-break:break-all;}
+.udrop-badge{
+  display:inline-block;font-size:10px;font-weight:700;
+  background:#dcfce7;color:#15803d;border-radius:100px;
+  padding:2px 8px;margin-top:4px;letter-spacing:.3px;
+}
+.udrop-item{
+  display:flex;align-items:center;gap:10px;
+  padding:13px 16px;border:none;background:none;
+  width:100%;text-align:left;font-size:14px;font-weight:700;
+  color:var(--text);cursor:pointer;font-family:inherit;
+  transition:background .12s;border-radius:0;
+}
+.udrop-item:hover,.udrop-item:active{background:#f1f5f9;}
+.udrop-item.danger{color:#dc2626;}
+.udrop-item.danger:hover{background:#fef2f2;}
+.udrop-sep{height:1px;background:var(--border);margin:2px 0;}
+
 /* UTILS */
 .sec-ttl{font-size:19px;font-weight:800;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
 .back-btn{
@@ -322,12 +366,15 @@ button,input,select{font-family:inherit;}
 <div class="hdr" style="position:relative;">
   <h1>🇬🇧 Tiếng Anh Giao Tiếp</h1>
   <p>Dành cho người mới bắt đầu • Lộ trình 8 tuần</p>
-  <button id="profile-btn" onclick="showLogin()"
-    style="position:absolute;top:12px;right:14px;background:rgba(255,255,255,.18);
-    border:1.5px solid rgba(255,255,255,.4);border-radius:100px;color:#fff;
-    padding:6px 13px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">
-    👤 Đăng nhập
-  </button>
+  <div class="user-menu-wrap" id="user-menu-wrap">
+    <button id="profile-btn" onclick="toggleUserMenu()"
+      style="background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.4);
+      border-radius:100px;color:#fff;padding:6px 13px;font-size:13px;font-weight:700;
+      cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:7px;">
+      <span>👤</span><span id="profile-name">Đăng nhập</span>
+    </button>
+    <div id="user-dropdown" style="display:none;"></div>
+  </div>
 </div>
 
 <!-- PAGE: HOME -->
@@ -575,6 +622,7 @@ function signInGoogle(){
 }
 
 function doSignOut(){
+  closeUserMenu();
   if(!confirm('Đăng xuất khỏi tài khoản Google?')) return;
   fbUser = null;
   if(FB_ON) firebase.auth().signOut();
@@ -713,21 +761,83 @@ function createUser(){
 
 function updateProfileBtn(){
   const btn = document.getElementById('profile-btn');
+  const nameEl = document.getElementById('profile-name');
   if(!btn) return;
   if(fbUser){
     const firstName = (fbUser.displayName||fbUser.email||'User').split(' ')[0];
     if(fbUser.photoURL){
-      btn.innerHTML = `<img src="${fbUser.photoURL}" style="width:22px;height:22px;border-radius:50%;vertical-align:middle;margin-right:6px;">${firstName}`;
+      btn.innerHTML = `<img src="${fbUser.photoURL}" style="width:24px;height:24px;border-radius:50%;object-fit:cover;"><span>${firstName}</span>`;
     } else {
-      btn.textContent = '👤 '+firstName;
+      btn.innerHTML = `<span>👤</span><span>${firstName}</span>`;
     }
-    btn.onclick = doSignOut;
   } else {
     const name = _ls('eng2m_cur')||'';
-    btn.textContent = name ? '👤 '+name : '👤 Đăng nhập';
-    btn.onclick = showLogin;
+    btn.innerHTML = `<span>👤</span><span>${name||'Đăng nhập'}</span>`;
   }
 }
+
+function toggleUserMenu(){
+  const cu = curUser();
+  if(!cu && !fbUser){ showLogin(); return; }
+  const dd = document.getElementById('user-dropdown');
+  const isOpen = dd.style.display!=='none';
+  if(isOpen){ dd.style.display='none'; return; }
+  renderUserDropdown();
+  dd.style.display='';
+}
+
+function renderUserDropdown(){
+  const dd = document.getElementById('user-dropdown');
+  let html = '';
+  if(fbUser){
+    const avHtml = fbUser.photoURL
+      ? `<img class="udrop-av" src="${fbUser.photoURL}">`
+      : `<div class="udrop-av-ph">👤</div>`;
+    html += `<div class="udrop-info">
+      ${avHtml}
+      <div>
+        <div class="udrop-name">${fbUser.displayName||'Người dùng'}</div>
+        <div class="udrop-email">${fbUser.email||''}</div>
+        <div class="udrop-badge">✓ Google</div>
+      </div>
+    </div>
+    <button class="udrop-item" onclick="closeUserMenu();showLogin()">
+      🔄 <span>Đổi tài khoản</span>
+    </button>
+    <div class="udrop-sep"></div>
+    <button class="udrop-item danger" onclick="doSignOut()">
+      🚪 <span>Đăng xuất</span>
+    </button>`;
+  } else {
+    const name = _ls('eng2m_cur')||'';
+    html += `<div class="udrop-info">
+      <div class="udrop-av-ph">👤</div>
+      <div>
+        <div class="udrop-name">${name}</div>
+        <div class="udrop-email">Tài khoản cục bộ</div>
+        <div class="udrop-badge" style="background:#fef9c3;color:#92400e;">Máy này</div>
+      </div>
+    </div>
+    <button class="udrop-item" onclick="closeUserMenu();showLogin()">
+      🔄 <span>Đổi người dùng</span>
+    </button>
+    <div class="udrop-sep"></div>
+    <button class="udrop-item" onclick="closeUserMenu();showLogin()">
+      🔑 <span>Đăng nhập Google</span>
+    </button>`;
+  }
+  dd.innerHTML = html;
+}
+
+function closeUserMenu(){
+  const dd = document.getElementById('user-dropdown');
+  if(dd) dd.style.display='none';
+}
+
+document.addEventListener('click',function(e){
+  const wrap = document.getElementById('user-menu-wrap');
+  if(wrap && !wrap.contains(e.target)) closeUserMenu();
+});
 
 function refreshAll(){
   updateProfileBtn();
