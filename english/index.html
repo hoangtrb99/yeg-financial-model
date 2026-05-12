@@ -367,6 +367,12 @@ button,input,select{font-family:inherit;}
   </div>
 
   <div style="width:100%;max-width:400px;">
+    <div id="inapp-msg" style="display:none;background:#fff3cd;border:2px solid #ffc107;border-radius:14px;padding:16px;margin-bottom:16px;font-size:15px;color:#856404;line-height:1.6;">
+      ⚠️ <strong>Google login không dùng được trong Messenger.</strong><br>
+      Hãy copy link rồi mở bằng <strong>Safari</strong>:<br>
+      <span style="font-size:13px;word-break:break-all;color:#0369a1;">https://hoangtrb99.github.io/yeg-financial-model/english/</span><br><br>
+      Hoặc dùng <strong>tên cục bộ</strong> bên dưới (tiến độ lưu trên máy này).
+    </div>
     <div id="plist"></div>
 
     <div style="background:#fff;border-radius:16px;padding:20px;border:2px solid var(--border);">
@@ -441,8 +447,19 @@ function curUser(){
 function setCurUser(n){ _ls('eng2m_cur', n); }
 
 // ---- Firebase Auth ----
+function isInAppBrowser(){
+  const ua = navigator.userAgent||'';
+  if(/FBAN|FBAV|FB_IAB|MessengerForiOS/.test(ua)) return true;
+  if(/iPhone|iPad/.test(ua) && /AppleWebKit/.test(ua) && !/Safari/.test(ua)) return true;
+  return false;
+}
+
 function signInGoogle(){
   if(!FB_ON) return;
+  if(isInAppBrowser()){
+    document.getElementById('inapp-msg').style.display='';
+    return;
+  }
   const provider = new firebase.auth.GoogleAuthProvider();
   firebase.auth().signInWithPopup(provider)
     .catch(()=>firebase.auth().signInWithRedirect(provider));
