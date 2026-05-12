@@ -219,10 +219,62 @@ button,input,select{font-family:inherit;}
   padding:3px 14px;font-size:12px;font-weight:800;margin-bottom:8px;
 }
 .hidden{display:none!important;}
-@media(min-width:600px){
-  body{max-width:480px;margin:0 auto;}
-  .bnav{max-width:480px;left:50%;transform:translateX(-50%);}
-  .hdr{border-radius:0;}
+
+/* ── TABLET 600px ── */
+@media(min-width:600px) and (max-width:899px){
+  body{max-width:600px;margin:0 auto;}
+  .bnav{max-width:600px;left:50%;transform:translateX(-50%);}
+}
+
+/* ── DESKTOP 900px+ ── */
+@media(min-width:900px){
+  body{
+    max-width:none;background:#dde3ee;
+    padding-bottom:0;
+  }
+  /* Header */
+  .hdr{border-radius:0;padding:18px 40px;}
+  .hdr h1{font-size:26px;}
+  /* Bottom nav → top tab bar */
+  .bnav{
+    position:relative;bottom:auto;left:auto;right:auto;
+    transform:none;max-width:none;
+    border-top:none;border-bottom:3px solid var(--border);
+    box-shadow:none;justify-content:center;gap:4px;padding:0 40px;
+    background:#fff;
+  }
+  .bnav-btn{
+    flex:none;flex-direction:row;gap:8px;
+    padding:14px 32px;font-size:15px;min-height:52px;
+    border-radius:10px 10px 0 0;
+  }
+  .bnav-btn span:first-child{font-size:20px;}
+  .bnav-btn.on{background:var(--blue-lt);border-bottom:3px solid var(--blue);margin-bottom:-3px;}
+  /* Pages */
+  .pg{max-width:1100px;margin:0 auto;padding:32px 40px;}
+  /* Home stats grid → 4 columns */
+  .sgrid{grid-template-columns:repeat(4,1fr);}
+  /* Lesson list → 2 columns */
+  #lesson-list{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  #lesson-list .lcard{margin-bottom:0;}
+  /* Lesson page → sidebar + content */
+  #pg-lesson{
+    max-width:1100px;margin:0 auto;padding:32px 40px;
+    display:grid;grid-template-columns:260px 1fr;
+    grid-template-rows:auto auto 1fr;gap:0 28px;
+  }
+  #pg-lesson .back-btn{grid-column:1/-1;}
+  #pg-lesson #les-hdr{grid-column:1/-1;}
+  #pg-lesson .tabs{grid-column:2;margin-bottom:18px;}
+  #pg-lesson #tc-vocab,#pg-lesson #tc-phrases,
+  #pg-lesson #tc-qa,#pg-lesson #tc-quiz{grid-column:2;}
+  /* Login overlay wider */
+  .login-ov{padding:48px 40px 80px;}
+  /* Cards wider */
+  .fcard{padding:48px 32px;min-height:240px;}
+  .fcard .fen{font-size:52px;}
+  /* Quiz options 2 cols always */
+  .qopts{grid-template-columns:1fr 1fr;}
 }
 </style>
 </head>
@@ -467,25 +519,19 @@ function signInGoogle(){
   const provider = new firebase.auth.GoogleAuthProvider();
   const errEl = document.getElementById('name-err');
   const btn = document.getElementById('google-btn');
-  if(btn){ btn.textContent='⏳ Đang mở Google...'; btn.disabled=true; }
+  const resetBtn = ()=>{ if(btn){btn.textContent='Đăng nhập với Google';btn.disabled=false;} };
+  if(btn){ btn.textContent='⏳ Đang mở...'; btn.disabled=true; }
 
-  if(isIOS()){
-    firebase.auth().signInWithRedirect(provider)
-      .catch(err=>{
-        if(btn){ btn.textContent='Đăng nhập với Google'; btn.disabled=false; }
-        if(errEl) errEl.textContent='Lỗi iOS: '+(err.code||err.message);
-      });
-    return;
-  }
   firebase.auth().signInWithPopup(provider)
+    .then(()=>resetBtn())
     .catch(err=>{
-      if(btn){ btn.innerHTML='<svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Đăng nhập với Google'; btn.disabled=false; }
-      if(err.code==='auth/popup-blocked'){
+      resetBtn();
+      if(err.code==='auth/popup-blocked'||err.code==='auth/operation-not-supported-in-this-environment'){
         firebase.auth().signInWithRedirect(provider);
         return;
       }
       if(err.code==='auth/popup-closed-by-user'||err.code==='auth/cancelled-popup-request') return;
-      if(errEl) errEl.textContent='Lỗi: '+(err.message||err.code);
+      if(errEl) errEl.textContent='Lỗi: '+(err.code||err.message);
     });
 }
 
@@ -565,8 +611,7 @@ function renderPlist(){
   const el = document.getElementById('plist');
   let html = '';
 
-  const onMobile = /iPhone|iPad|iPod|Android/.test(navigator.userAgent||'');
-  if(FB_ON && !onMobile){
+  if(FB_ON){
     html += `<button id="google-btn" onclick="signInGoogle()" style="display:flex;align-items:center;justify-content:center;gap:12px;
       width:100%;padding:16px 20px;background:#fff;border:2px solid #e2e8f0;border-radius:16px;
       font-size:17px;font-weight:800;color:#1e293b;cursor:pointer;margin-bottom:16px;
@@ -578,12 +623,6 @@ function renderPlist(){
       <div style="flex:1;height:1px;background:var(--border);"></div>
       <span style="font-size:13px;color:var(--muted);font-weight:600;">hoặc dùng tên cục bộ</span>
       <div style="flex:1;height:1px;background:var(--border);"></div>
-    </div>`;
-  }
-  if(FB_ON && onMobile){
-    html += `<div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:12px;padding:14px 16px;margin-bottom:16px;font-size:14px;color:#0369a1;line-height:1.6;">
-      💻 <strong>Đăng nhập Google</strong> chỉ khả dụng trên máy tính.<br>
-      Trên điện thoại, nhập tên bên dưới để bắt đầu học. Tiến độ lưu trên thiết bị này.
     </div>`;
   }
 
