@@ -454,6 +454,10 @@ function isInAppBrowser(){
   return false;
 }
 
+function isIOS(){
+  return /iPhone|iPad|iPod/.test(navigator.userAgent);
+}
+
 function signInGoogle(){
   if(!FB_ON) return;
   if(isInAppBrowser()){
@@ -462,16 +466,18 @@ function signInGoogle(){
   }
   const provider = new firebase.auth.GoogleAuthProvider();
   const errEl = document.getElementById('name-err');
+  // iOS Safari không hỗ trợ popup → dùng redirect
+  if(isIOS()){
+    firebase.auth().signInWithRedirect(provider);
+    return;
+  }
   firebase.auth().signInWithPopup(provider)
     .catch(err=>{
-      // Popup bị chặn → dùng redirect
       if(err.code==='auth/popup-blocked'){
         firebase.auth().signInWithRedirect(provider);
         return;
       }
-      // User tự đóng popup → không làm gì
       if(err.code==='auth/popup-closed-by-user'||err.code==='auth/cancelled-popup-request') return;
-      // Lỗi khác → hiện thông báo
       if(errEl) errEl.textContent='Lỗi đăng nhập: '+(err.message||err.code);
     });
 }
