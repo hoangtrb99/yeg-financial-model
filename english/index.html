@@ -454,10 +454,6 @@ function isInAppBrowser(){
   return false;
 }
 
-function isIOS(){
-  return /iPhone|iPad|iPod/.test(navigator.userAgent);
-}
-
 function signInGoogle(){
   if(!FB_ON) return;
   if(isInAppBrowser()){
@@ -466,19 +462,14 @@ function signInGoogle(){
   }
   const provider = new firebase.auth.GoogleAuthProvider();
   const errEl = document.getElementById('name-err');
-  // iOS Safari không hỗ trợ popup → dùng redirect
-  if(isIOS()){
-    firebase.auth().signInWithRedirect(provider);
-    return;
-  }
   firebase.auth().signInWithPopup(provider)
     .catch(err=>{
-      if(err.code==='auth/popup-blocked'){
+      if(err.code==='auth/popup-blocked'||err.code==='auth/operation-not-supported-in-this-environment'){
         firebase.auth().signInWithRedirect(provider);
         return;
       }
       if(err.code==='auth/popup-closed-by-user'||err.code==='auth/cancelled-popup-request') return;
-      if(errEl) errEl.textContent='Lỗi đăng nhập: '+(err.message||err.code);
+      if(errEl) errEl.textContent='Lỗi: '+(err.message||err.code);
     });
 }
 
@@ -532,7 +523,13 @@ function _afterAuth(){
 }
 
 if(FB_ON){
-  firebase.auth().getRedirectResult().catch(()=>{});
+  firebase.auth().getRedirectResult().then(async result=>{
+    if(result&&result.user&&!fbUser){
+      fbUser=result.user;
+      await syncFromCloud();
+      _afterAuth();
+    }
+  }).catch(err=>console.warn('redirect:',err.code));
   firebase.auth().onAuthStateChanged(async user=>{
     if(user){ fbUser=user; await syncFromCloud(); }
     _afterAuth();
