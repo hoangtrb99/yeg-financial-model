@@ -1261,10 +1261,10 @@ const LESSONS = [
     {en:"Emergency",vi:"Khẩn cấp",ph:"i-mơ-jần-xi"},
     {en:"999",vi:"Số cấp cứu UK (Police/Fire/Ambulance)",ph:"nai-n nai-n nai-n"},
     {en:"111",vi:"Đường dây NHS tư vấn (không khẩn cấp)",ph:"oăn oăn oăn"},
-    {en:"NHS",vi:"Hệ thống y tế quốc gia UK (miễn phí)",ph:"en êch et"},
-    {en:"A&E",vi:"Phòng cấp cứu (Accident & Emergency)",ph:"ê ền i"},
-    {en:"GP",vi:"Bác sĩ gia đình (General Practitioner)",ph:"ji pi"},
-    {en:"GP surgery",vi:"Phòng khám bác sĩ gia đình",ph:"ji pi xơ-jơ-ri"},
+    {en:"NHS",vi:"Hệ thống y tế quốc gia UK (miễn phí)",ph:"en êch et",tts:"N H S"},
+    {en:"A&E",vi:"Phòng cấp cứu (Accident & Emergency)",ph:"ê ền i",tts:"A and E"},
+    {en:"GP",vi:"Bác sĩ gia đình (General Practitioner)",ph:"ji pi",tts:"G P"},
+    {en:"GP surgery",vi:"Phòng khám bác sĩ gia đình",ph:"ji pi xơ-jơ-ri",tts:"G P surgery"},
     {en:"Ambulance",vi:"Xe cứu thương",ph:"em-biu-lần-s"},
     {en:"Hospital",vi:"Bệnh viện",ph:"hót-pi-tồl"},
     {en:"Doctor",vi:"Bác sĩ",ph:"đóc-tơ"},
@@ -1356,16 +1356,28 @@ function recordQuiz(lessonId, score, total){
 // ============================================================
 // SPEECH
 // ============================================================
+const DIGIT_WORDS = ['zero','one','two','three','four','five','six','seven','eight','nine'];
+function preprocessTTS(text){
+  // số 3+ chữ số → đọc từng chữ số (999 → "nine nine nine")
+  text = text.replace(/\b(\d{3,})\b/g, m => m.split('').map(d=>DIGIT_WORDS[+d]||d).join(' '));
+  // số 1-2 chữ số trong context số điện thoại/mã → giữ nguyên để TTS đọc tự nhiên
+  // & → and
+  text = text.replace(/&/g,' and ');
+  return text;
+}
 function speak(text){
   if(!window.speechSynthesis){ return; }
   window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'en-US';
-  u.rate = 0.8;
+  const u = new SpeechSynthesisUtterance(preprocessTTS(text));
+  u.lang = 'en-GB';
+  u.rate = 0.82;
   u.pitch = 1;
   window.speechSynthesis.speak(u);
 }
-function speakCur(){ speak(LESSONS[curLesson].vocab[curCard].en); }
+function speakCur(){
+  const v = LESSONS[curLesson].vocab[curCard];
+  speak(v.tts || v.en);
+}
 
 // ============================================================
 // NAVIGATION
@@ -1505,7 +1517,7 @@ function renderVocabList(){
       <button class="abtn spk-v" data-i="${i}" style="padding:8px 12px;font-size:14px;">🔊</button>
     </div>`).join('')}`;
   document.querySelectorAll('#vocab-list .spk-v').forEach(b=>{
-    b.onclick = ()=>speak(v[+b.dataset.i].en);
+    b.onclick = ()=>{ const w=v[+b.dataset.i]; speak(w.tts||w.en); };
   });
 }
 
