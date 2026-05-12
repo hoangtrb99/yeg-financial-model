@@ -565,7 +565,8 @@ function renderPlist(){
   const el = document.getElementById('plist');
   let html = '';
 
-  if(FB_ON){
+  const onMobile = /iPhone|iPad|iPod|Android/.test(navigator.userAgent||'');
+  if(FB_ON && !onMobile){
     html += `<button id="google-btn" onclick="signInGoogle()" style="display:flex;align-items:center;justify-content:center;gap:12px;
       width:100%;padding:16px 20px;background:#fff;border:2px solid #e2e8f0;border-radius:16px;
       font-size:17px;font-weight:800;color:#1e293b;cursor:pointer;margin-bottom:16px;
@@ -577,6 +578,12 @@ function renderPlist(){
       <div style="flex:1;height:1px;background:var(--border);"></div>
       <span style="font-size:13px;color:var(--muted);font-weight:600;">hoặc dùng tên cục bộ</span>
       <div style="flex:1;height:1px;background:var(--border);"></div>
+    </div>`;
+  }
+  if(FB_ON && onMobile){
+    html += `<div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:12px;padding:14px 16px;margin-bottom:16px;font-size:14px;color:#0369a1;line-height:1.6;">
+      💻 <strong>Đăng nhập Google</strong> chỉ khả dụng trên máy tính.<br>
+      Trên điện thoại, nhập tên bên dưới để bắt đầu học. Tiến độ lưu trên thiết bị này.
     </div>`;
   }
 
